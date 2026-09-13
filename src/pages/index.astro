@@ -1,0 +1,164 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GameCard from '../components/GameCard.astro';
+import { toSiteUrl, withBase } from '../utils/site';
+import { sortEditorialEntries } from '../utils/entries';
+import { profileFocusAreas, siteMeta } from '../utils/site-meta';
+import { getAuthorSchema, getWebSiteSchema } from '../utils/schema';
+
+const games = sortEditorialEntries(await getCollection('games'));
+
+const featuredGames = games.filter((item) => item.data.featured).slice(0, 3);
+const homeGames = featuredGames.length > 0 ? featuredGames : games.slice(0, 3);
+
+const playableCount = games.filter((item) => item.data.playableWeb).length;
+const homePlayableGames = games.filter((item) => item.data.playableWeb).slice(0, 3);
+const loopShotCount = games.reduce((sum, item) => sum + item.data.screenshots.length, 0);
+
+const homeUrl = toSiteUrl('/', Astro.site);
+const homeSchema = [
+  getWebSiteSchema(Astro.site),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${homeUrl}#webpage`,
+    name: `${siteMeta.name} | ${siteMeta.title}`,
+    description: siteMeta.description,
+    url: homeUrl,
+    inLanguage: 'zh-CN',
+    isPartOf: { '@id': `${homeUrl}#website` },
+    about: getAuthorSchema(Astro.site)
+  }
+];
+---
+
+<BaseLayout title={`${siteMeta.name} | ${siteMeta.title}`} description={siteMeta.description} structuredData={homeSchema}>
+  <section class="home-banner tech-story-banner" aria-label="作品集横幅">
+    <div class="banner-copy">
+      <p class="eyebrow">卢竑邑 Adam · Game Designer</p>
+      <h1>我设计的游戏，都能直接玩。</h1>
+      <p>每款游戏一个陈列页：核心循环怎么转、真实截图长什么样、以及从设计稿到可玩版本的 AI 开发工作流。</p>
+      <div class="button-row">
+        <a class="button" href={withBase('/games')}>查看全部游戏</a>
+        <a class="button button--ghost" href={withBase('/about')}>关于我</a>
+      </div>
+      <div class="tag-list">
+        <span>{games.length} 款游戏</span>
+        <span>{playableCount} 个试玩入口</span>
+        <span>{loopShotCount} 张真实截图</span>
+      </div>
+    </div>
+
+    <div class="banner-visual" aria-hidden="true">
+      <div class="signal-track signal-track--top">
+        <span></span>
+      </div>
+      <div class="banner-panel prototype-window">
+        <div class="panel-head">
+          <span>Core Loop</span>
+          <i></i>
+        </div>
+        <div class="prototype-stage">
+          <span class="playfield-grid"></span>
+          <span class="player-block"></span>
+          <span class="target-block target-block--one"></span>
+          <span class="target-block target-block--two"></span>
+          <span class="motion-trail"></span>
+        </div>
+      </div>
+
+      <div class="banner-panel system-loop">
+        <div class="loop-step loop-step--one">设计</div>
+        <div class="loop-step loop-step--two">AI 实现</div>
+        <div class="loop-step loop-step--three">试玩验证</div>
+        <div class="loop-path"></div>
+      </div>
+      <div class="signal-track signal-track--bottom">
+        <span></span>
+      </div>
+    </div>
+  </section>
+
+  {homePlayableGames.length > 0 && (
+    <section class="card home-play-section">
+      <div class="section-heading">
+        <div>
+          <h2>立即试玩</h2>
+          <p class="content-meta">已经接通 Web 版的游戏，点进去就能玩。</p>
+        </div>
+        <a href={withBase('/games')}>全部游戏</a>
+      </div>
+      <div class="play-lane">
+        {homePlayableGames.map((game) => (
+          <article class="play-lane-card">
+            <div class="play-lane-copy">
+              <p class="eyebrow">Web Demo</p>
+              <strong>{game.data.title}</strong>
+              <span>{game.data.summary}</span>
+            </div>
+            <div class="tag-list">
+              {game.data.aiTools.slice(0, 2).map((tool) => <span>{tool}</span>)}
+            </div>
+            <div class="card-actions">
+              {game.data.embedUrl ? (
+                <a class="button button--small" href={withBase(game.data.embedUrl)} target="_blank" rel="noopener noreferrer">立即试玩</a>
+              ) : null}
+              <a class="button button--ghost button--small" href={withBase(`/games/${game.id}`)}>项目详情</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="card home-featured-projects">
+    <div class="section-heading">
+      <div>
+        <h2>精选游戏</h2>
+        <p class="content-meta">能代表我设计方向和完成度的代表作品。</p>
+      </div>
+      <a href={withBase('/games')}>全部游戏</a>
+    </div>
+    <div class="grid grid--cards-lg">
+      {homeGames.map((game) => (
+        <GameCard
+          slug={game.id}
+          href={`/games/${game.id}`}
+          title={game.data.title}
+          summary={game.data.summary}
+          description={game.data.description}
+          status={game.data.status}
+          role={game.data.role}
+          platforms={game.data.platforms}
+          playableWeb={game.data.playableWeb}
+          thumbnail={game.data.thumbnail}
+          featured={game.data.featured}
+          screenshotCount={game.data.screenshots.length}
+          engine={game.data.engine}
+          playUrl={game.data.embedUrl}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading">
+      <div>
+        <h2>我的工作方式</h2>
+        <p class="content-meta">设计判断是我的，实现交给 AI，每一轮都在试玩里验证。</p>
+      </div>
+      <a href={withBase('/about')}>详细说明</a>
+    </div>
+    <div class="positioning-grid">
+      {profileFocusAreas.map((item) => (
+        <article class="positioning-card">
+          <p class="eyebrow">Focus</p>
+          <strong>{item.title}</strong>
+          <span class="positioning-ratio">{item.ratio}</span>
+          <p>{item.summary}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

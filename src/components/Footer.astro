@@ -1,0 +1,39 @@
+---
+import { withBase } from '../utils/site';
+import { navLinks, siteMeta } from '../utils/site-meta';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <section>
+      <p class="eyebrow">Portfolio</p>
+      <h2>{siteMeta.name}</h2>
+      <p>{siteMeta.description}</p>
+    </section>
+
+    <section>
+      <p class="eyebrow">内容入口</p>
+      <div class="footer-nav">
+        {navLinks.map((link) => (
+          <a href={withBase(link.href)}>{link.label}</a>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <p class="eyebrow">联系 / 关注</p>
+      <div class="footer-nav">
+        <a href={siteMeta.githubProfile} target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+        <a href={siteMeta.repository} target="_blank" rel="noopener noreferrer">仓库主页</a>
+        <a href={withBase(siteMeta.rss)}>RSS 订阅</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© {year} {siteMeta.parentBrand} · {siteMeta.name}</p>
+    <p>静态游戏策划作品集 · Astro 驱动</p>
+  </div>
+</footer>

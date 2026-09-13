@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1b2d"/>
+      <stop offset="1" stop-color="#1d3a5f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <g fill="none" stroke="#2c4f7c" stroke-width="2">
+    <path d="M0 600 L1280 600"/>
+    <path d="M0 660 L1280 660"/>
+    <path d="M160 720 L160 600"/>
+    <path d="M400 720 L400 600"/>
+    <path d="M640 720 L640 600"/>
+    <path d="M880 720 L880 600"/>
+    <path d="M1120 720 L1120 600"/>
+  </g>
+  <rect x="820" y="500" width="90" height="100" fill="#0078d4"/>
+  <rect x="1060" y="430" width="70" height="170" fill="#00a99d" opacity="0.85"/>
+  <circle cx="420" cy="240" r="110" fill="#ffce5c" opacity="0.9"/>
+  <circle cx="420" cy="240" r="150" fill="none" stroke="#ffce5c" stroke-dasharray="10 14" opacity="0.5"/>
+  <text x="640" y="330" text-anchor="middle" font-family="sans-serif" font-size="64" font-weight="700" fill="#ffffff">游戏封面占位图</text>
+  <text x="640" y="390" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#9fc3e8">替换为 1280×720 的封面图或 15 秒玩法 GIF</text>
+</svg>

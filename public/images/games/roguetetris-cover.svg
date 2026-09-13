@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.4" r="1">
+      <stop offset="0" stop-color="#140f2b"/>
+      <stop offset="1" stop-color="#07050f"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <g fill="#9d8cff">
+    <rect x="560" y="80" width="60" height="60" rx="6"/>
+    <rect x="620" y="80" width="60" height="60" rx="6"/>
+    <rect x="560" y="140" width="60" height="60" rx="6"/>
+    <rect x="620" y="140" width="60" height="60" rx="6"/>
+  </g>
+  <g fill="#38e0c8">
+    <rect x="760" y="200" width="60" height="60" rx="6"/>
+    <rect x="820" y="200" width="60" height="60" rx="6"/>
+    <rect x="880" y="200" width="60" height="60" rx="6"/>
+    <rect x="880" y="140" width="60" height="60" rx="6"/>
+  </g>
+  <g fill="#ffb454">
+    <rect x="440" y="320" width="60" height="60" rx="6"/>
+    <rect x="500" y="320" width="60" height="60" rx="6"/>
+    <rect x="380" y="320" width="60" height="60" rx="6"/>
+    <rect x="500" y="260" width="60" height="60" rx="6"/>
+  </g>
+  <g opacity="0.35">
+    <rect x="360" y="560" width="480" height="20" rx="4" fill="#9d8cff"/>
+    <rect x="360" y="580" width="480" height="20" rx="4" fill="#1c2f4a"/>
+    <rect x="360" y="600" width="480" height="20" rx="4" fill="#9d8cff"/>
+    <rect x="360" y="620" width="480" height="20" rx="4" fill="#1c2f4a"/>
+    <rect x="600" y="500" width="60" height="60" rx="6" fill="#38e0c8" opacity="0.9"/>
+  </g>
+  <text x="100" y="120" font-family="sans-serif" font-size="58" font-weight="700" fill="#ffffff">RogueTetris</text>
+  <text x="100" y="180" font-family="sans-serif" font-size="26" fill="#c9baff">构筑类肉鸽俄罗斯方块 · 波次 / 三选一 / Build 构筑</text>
+  <text x="100" y="640" font-family="sans-serif" font-size="18" fill="#6f6a99">封面占位图 · 建议替换为真实玩法截图或 GIF</text>
+</svg>

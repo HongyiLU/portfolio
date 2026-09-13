@@ -1,0 +1,131 @@
+﻿---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/editorial.css';
+import { siteMeta } from '../utils/site-meta';
+import { toSiteUrl, withBase } from '../utils/site';
+import type { JsonLdInput } from '../utils/schema';
+import { serializeJsonLd } from '../utils/schema';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  canonicalPath?: string;
+  robots?: string;
+  structuredData?: JsonLdInput;
+}
+
+const {
+  title = `${siteMeta.name} | ${siteMeta.title}`,
+  description = siteMeta.description,
+  image,
+  type = 'website',
+  canonicalPath,
+  robots,
+  structuredData
+} = Astro.props;
+
+const canonical = Astro.site ? toSiteUrl(canonicalPath ?? Astro.url.pathname, Astro.site) : Astro.url.toString();
+const imageUrl = image
+  ? Astro.site
+    ? toSiteUrl(image, Astro.site)
+    : withBase(image)
+  : Astro.site
+    ? toSiteUrl(siteMeta.shareImage, Astro.site)
+    : withBase(siteMeta.shareImage);
+const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? structuredData : [structuredData]) : [];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    {robots ? <meta name="robots" content={robots} /> : null}
+    <meta name="theme-color" content="#05080f" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content={siteMeta.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteMeta.name} RSS`} href={withBase('/rss.xml')} />
+    <link rel="icon" type="image/svg+xml" href={withBase(siteMeta.favicon)} />
+    <link rel="apple-touch-icon" href={withBase(siteMeta.favicon)} />
+    {structuredDataItems.map((item) => (
+      <script type="application/ld+json" set:html={serializeJsonLd(item)} />
+    ))}
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <div class="page-shell">
+      <Nav />
+      <main class="page-main" id="main-content">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <script>
+      // 滚动入场：模块进入视口时"上浮 + 描边辉光"上线，网格子项错峰
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const gridSelectors = [
+        '.grid--cards-lg',
+        '.play-lane',
+        '.positioning-grid',
+        '.core-loop-track',
+        '.workflow-track',
+        '.milestone-list',
+        '.screenshot-grid',
+        '.project-switcher-grid',
+        '.about-method-grid',
+        '.about-now-list',
+        '.project-evidence-grid',
+        '.archive-metrics',
+        '.meta-grid'
+      ];
+      const targets = [
+        ...document.querySelectorAll('.page-main > *, .content-main > *, .side-stack > *'),
+        ...[...document.querySelectorAll(gridSelectors.join(','))].flatMap((group) => [...group.children])
+      ];
+      const unique = [...new Set(targets)];
+
+      if (prefersReducedMotion) {
+        // 减少动态偏好：直接全部可见，不做入场
+      } else {
+        for (const el of unique) {
+          el.classList.add('js-reveal');
+        }
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const el = entry.target;
+              const index = Number(el.dataset.revealIndex ?? 0);
+              el.style.transitionDelay = `${Math.min(index * 70, 420)}ms`;
+              el.classList.add('is-revealed');
+              observer.unobserve(el);
+            }
+          },
+          { threshold: 0.08, rootMargin: '0px 0px -6% 0px' }
+        );
+        for (const el of unique) {
+          const parent = el.parentElement;
+          const siblings = parent ? [...parent.children].filter((c) => c.classList.contains('js-reveal')) : [];
+          el.dataset.revealIndex = String(siblings.indexOf(el));
+          observer.observe(el);
+        }
+      }
+    </script>
+  </body>
+</html>

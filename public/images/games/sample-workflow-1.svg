@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="380" viewBox="0 0 800 380">
+  <rect width="800" height="380" fill="#101a2b"/>
+  <rect x="40" y="40" width="560" height="70" rx="10" fill="#1c2f4a"/>
+  <text x="64" y="82" font-family="monospace" font-size="20" fill="#9fc3e8">&gt; 你来实现这个核心循环…</text>
+  <rect x="40" y="140" width="720" height="90" rx="10" fill="#173325"/>
+  <text x="64" y="180" font-family="monospace" font-size="20" fill="#9fe0b8">AI: 已生成原型 v0.1，包含 3 个循环环节…</text>
+  <text x="64" y="210" font-family="monospace" font-size="18" fill="#6fae8d">改动: movement.js / scoring.js / hud.html</text>
+  <rect x="40" y="260" width="560" height="70" rx="10" fill="#3a2a1c"/>
+  <text x="64" y="302" font-family="monospace" font-size="20" fill="#f2d29f">&gt; 反馈节奏太快，把间隔放宽到 1.5s 再看</text>
+  <text x="640" y="350" font-family="sans-serif" font-size="16" fill="#5c7ba3">▲ 关键对话截图占位</text>
+</svg>

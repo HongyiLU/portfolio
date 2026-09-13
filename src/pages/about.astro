@@ -1,0 +1,151 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { withBase } from '../utils/site';
+import { profileFocusAreas, siteMeta } from '../utils/site-meta';
+import { getProfilePageSchema } from '../utils/schema';
+
+const games = await getCollection('games');
+const playableCount = games.filter((game) => game.data.playableWeb).length;
+const profileSchema = getProfilePageSchema(Astro.site);
+
+const workingMethods = [
+  {
+    step: '01',
+    title: '先把核心循环跑起来',
+    summary: '把规则、输入和反馈压成一个可玩的最小版本，先确认这条循环是否真的成立。'
+  },
+  {
+    step: '02',
+    title: '用 AI 把设计做成可玩版本',
+    summary: '用 Claude Code / Codex 把设计稿变成实现：我给设计输入和验收标准，AI 负责产出，每一轮在试玩里验证。'
+  },
+  {
+    step: '03',
+    title: '整理成陈列页',
+    summary: '把核心循环、截图集和开发工作流整理成一个页面，让第一次打开的人既看懂设计也能直接玩。'
+  }
+];
+
+const nowNotes = [
+  { label: '当前方向', value: '玩法设计 / 核心循环验证 / AI 辅助开发' },
+  { label: '内容状态', value: `${games.length} 款游戏，${playableCount} 个可试玩` },
+  { label: '站点技术', value: 'Astro 静态站点，内容集合管理' }
+];
+---
+
+<BaseLayout title={`关于 | ${siteMeta.name}`} description="这个作品集的定位、内容结构与当前关注。" structuredData={profileSchema}>
+  <Breadcrumbs items={[{ label: '首页', href: '/' }, { label: '关于' }]} />
+  <section class="page-heading card archive-hero about-hero">
+    <div class="archive-hero-copy">
+      <p class="eyebrow">About / Practice</p>
+      <h1>我是卢竑邑（Adam），游戏策划，用 AI 把每个设计都做成能玩的版本。</h1>
+      <p>
+        这个站点是我的游戏陈列馆：每款游戏一个陈列页，讲清楚三件事——核心循环怎么转、
+        真实画面长什么样、它如何从一张设计稿变成可以点开就玩的东西。
+      </p>
+      <div class="button-row">
+        <a class="button" href={withBase('/games')}>查看游戏</a>
+      </div>
+      <div class="archive-metrics">
+        <span><strong>{games.length}</strong> 款游戏</span>
+        <span><strong>{playableCount}</strong> 个试玩入口</span>
+      </div>
+    </div>
+
+    <div class="about-signal-card" aria-hidden="true">
+      <div class="about-signal-header">
+        <span>Working loop</span>
+        <strong>Design / Build / Playtest</strong>
+      </div>
+      <div class="about-orbit">
+        <span class="orbit-core">Playtest</span>
+        <span class="orbit-dot orbit-dot--one"></span>
+        <span class="orbit-dot orbit-dot--two"></span>
+        <span class="orbit-dot orbit-dot--three"></span>
+      </div>
+      <div class="about-signal-stack">
+        <span><strong>Design</strong><em>core loop</em></span>
+        <span><strong>AI Build</strong><em>prompt & iterate</em></span>
+        <span><strong>Showcase</strong><em>playable case</em></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-layout card-stack">
+    <div class="content-main">
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Method</p>
+            <h2>我怎样推进一个游戏</h2>
+          </div>
+        </div>
+        <div class="about-method-grid">
+          {workingMethods.map((item) => (
+            <article class="about-method-card">
+              <span>{item.step}</span>
+              <strong>{item.title}</strong>
+              <p>{item.summary}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Positioning</p>
+            <h2>能力定位</h2>
+          </div>
+          <p class="content-meta">这个作品集主要围绕三类能力展开。</p>
+        </div>
+        <div class="positioning-grid">
+          {profileFocusAreas.map((item) => (
+            <article class="positioning-card">
+              <p class="eyebrow">Focus</p>
+              <strong>{item.title}</strong>
+              <span class="positioning-ratio">{item.ratio}</span>
+              <span class="positioning-meter" style={`--value: ${item.ratio}`}></span>
+              <p>{item.summary}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+
+    <aside class="content-sidebar card about-sidebar">
+      <section>
+        <div class="section-heading">
+          <h2>当前状态</h2>
+        </div>
+        <div class="about-now-list">
+          {nowNotes.map((item) => (
+            <div class="about-now-item">
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <h2>入口</h2>
+        </div>
+        <div class="link-list">
+          <a href={withBase('/games')}>查看游戏陈列馆</a>
+          <a href={siteMeta.githubProfile} target="_blank" rel="noopener noreferrer">打开 GitHub Profile</a>
+          <a href={siteMeta.repository} target="_blank" rel="noopener noreferrer">查看站点仓库</a>
+          <a href={withBase(siteMeta.rss)}>订阅 RSS</a>
+        </div>
+      </section>
+
+      <section class="bilingual-card mini-panel">
+        <p class="eyebrow">English</p>
+        <p class="bilingual-lead">{siteMeta.englishDescription}</p>
+      </section>
+    </aside>
+  </section>
+</BaseLayout>

@@ -1,0 +1,46 @@
+﻿---
+import { withBase } from '../utils/site';
+
+interface Props {
+  title: string;
+  embedUrl?: string;
+}
+
+const { title, embedUrl } = Astro.props;
+---
+
+<section id="play" class="game-embed card">
+  <div class="game-embed-intro">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Playable Build</p>
+        <h2>在线试玩</h2>
+        <p class="content-meta">直接在页面里启动 Web 版；如果浏览器拦截音频、全屏或加载较慢，可以切到新标签运行。</p>
+      </div>
+    </div>
+    {embedUrl && (
+      <a class="button button--small" href={withBase(embedUrl)} target="_blank" rel="noopener noreferrer">新标签打开</a>
+    )}
+  </div>
+  {embedUrl ? (
+    <div class="game-embed-shell">
+      <div class="game-embed-toolbar" aria-label="试玩窗口状态">
+        <span class="game-embed-status">Web Build Ready</span>
+        <span>Godot Web</span>
+        <span>键盘 / 手柄</span>
+      </div>
+      <div class="game-embed-stage">
+        <iframe
+          src={withBase(embedUrl)}
+          title={`${title} 在线试玩`}
+          loading="lazy"
+          allow="autoplay; fullscreen; gamepad"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  ) : (
+    <p>当前还没有可以直接嵌入的 Web 版本。</p>
+  )}
+</section>

@@ -1,0 +1,115 @@
+---
+import { withBase } from '../utils/site';
+
+interface Props {
+  steps: { label: string; summary: string }[];
+  punchline?: string;
+  accent?: string;
+}
+
+const { steps, punchline, accent = '#4dc3ff' } = Astro.props;
+---
+
+<section class="card core-loop-panel" style={`--project-accent: ${accent};`}>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Core Loop</p>
+      <h2>核心循环</h2>
+      <p class="content-meta">
+        {punchline ?? '玩家在游戏里反复经历的一条闭环，设计上的所有扩展都挂在这条循环上。'}
+      </p>
+    </div>
+    <span class="core-loop-count" aria-hidden="true">{steps.length} 步循环</span>
+  </div>
+
+  {steps.length > 0 ? (
+    <ol class="core-loop-track" aria-label="核心循环步骤">
+      {steps.map((step, index) => (
+        <li class="core-loop-step" style={`--step-index: ${index};`}>
+          <span class="core-loop-number" aria-hidden="true">{index + 1}</span>
+          <div class="core-loop-copy">
+            <strong>{step.label}</strong>
+            <p>{step.summary}</p>
+          </div>
+          {index === steps.length - 1 ? (
+            <span class="core-loop-return" aria-hidden="true">↺ 回到第 1 步</span>
+          ) : null}
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p>这个项目还没有整理核心循环，后续补充。</p>
+  )}
+</section>
+
+<style>
+  .core-loop-panel {
+    --loop-accent: var(--project-accent, #0078d4);
+  }
+  .core-loop-count {
+    align-self: center;
+    font-size: 0.85rem;
+    color: var(--loop-accent);
+    border: 1px solid color-mix(in srgb, var(--loop-accent) 35%, transparent);
+    border-radius: 999px;
+    padding: 0.25rem 0.9rem;
+    white-space: nowrap;
+  }
+  .core-loop-track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+    counter-reset: loop;
+  }
+  .core-loop-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+    border-left: 3px solid var(--loop-accent);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--loop-accent) 4%, transparent);
+  }
+  .core-loop-number {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--loop-accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .core-loop-copy strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 1.02rem;
+  }
+  .core-loop-copy p {
+    margin: 0;
+    color: var(--muted, #4a5568);
+    line-height: 1.6;
+  }
+  .core-loop-return {
+    position: absolute;
+    right: 1rem;
+    bottom: -0.55rem;
+    font-size: 0.75rem;
+    color: var(--loop-accent);
+    background: var(--card-bg, #fff);
+    padding: 0 0.5rem;
+    border-radius: 999px;
+    border: 1px dashed color-mix(in srgb, var(--loop-accent) 45%, transparent);
+  }
+  @media (max-width: 640px) {
+    .core-loop-count {
+      display: none;
+    }
+  }
+</style>

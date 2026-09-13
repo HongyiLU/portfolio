@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/site';
+---
+
+<BaseLayout
+  title="页面未找到 | Adam的游戏策划Demo作品集"
+  description="你访问的页面不存在，返回首页或查看游戏陈列馆。"
+  canonicalPath="/404.html"
+  robots="noindex,follow"
+>
+  <section class="page-heading card page-heading--rich error-page">
+    <p class="eyebrow">404</p>
+    <h1>这个页面不在当前站点结构里。</h1>
+    <p>你可以回到首页重新浏览，或者直接进入游戏陈列馆。</p>
+    <div class="button-row">
+      <a class="button" href={withBase('/')}>返回首页</a>
+      <a class="button button--ghost" href={withBase('/games')}>查看游戏</a>
+    </div>
+  </section>
+
+  <section class="section-banner">
+    <div class="feature-grid">
+      <div class="mini-panel">
+        <p class="eyebrow">游戏</p>
+        <p>核心循环、截图集、AI 开发工作流和试玩入口都在这里。</p>
+        <a class="inline-link" href={withBase('/games')}>进入游戏陈列馆</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

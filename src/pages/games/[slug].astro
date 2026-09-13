@@ -1,0 +1,439 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ContentToc from '../../components/ContentToc.astro';
+import GameEmbed from '../../components/GameEmbed.astro';
+import CoreLoop from '../../components/CoreLoop.astro';
+import AiWorkflow from '../../components/AiWorkflow.astro';
+import { toSiteUrl, withBase } from '../../utils/site';
+import { estimateReadingTime, formatDate, gameStatusLabels } from '../../utils/site-meta';
+import { getAuthorSchema, getImageUrl } from '../../utils/schema';
+
+export async function getStaticPaths() {
+  const games = await getCollection('games');
+  return games.map((game) => ({
+    params: { slug: game.id },
+    props: { game }
+  }));
+}
+
+const { game } = Astro.props;
+const { Content, headings } = await render(game);
+const allGames = await getCollection('games');
+const relatedGames = allGames
+  .filter((item) => item.id !== game.id)
+  .map((item) => ({
+    item,
+    score: item.data.tags.filter((tag) => game.data.tags.includes(tag)).length
+  }))
+  .sort((a, b) => b.score - a.score || b.item.data.pubDate.valueOf() - a.item.data.pubDate.valueOf())
+  .slice(0, 3)
+  .map(({ item }) => item);
+
+// 从标签生成项目视觉身份，避免为每个游戏手写人设配置
+const heroPalette = [
+  { accent: '#4dc3ff', accent2: '#38e0c8', rgb: '77, 195, 255' },
+  { accent: '#ffb454', accent2: '#ff8a5c', rgb: '255, 180, 84' },
+  { accent: '#9d8cff', accent2: '#c9baff', rgb: '157, 140, 255' },
+  { accent: '#38e0c8', accent2: '#8af0df', rgb: '56, 224, 200' },
+  { accent: '#ff7ab8', accent2: '#ffb3d4', rgb: '255, 122, 184' }
+];
+const gameIndex = allGames.findIndex((item) => item.id === game.id);
+const hero = heroPalette[(gameIndex < 0 ? 0 : gameIndex) % heroPalette.length];
+const heroIdentity = game.data.tags.slice(0, 2).join(' / ') || '游戏项目';
+const heroKicker = game.data.role ?? 'Game Case';
+const heroProof = game.data.playableWeb
+  ? 'Web 试玩已接通'
+  : game.data.downloadLinks.length > 0
+    ? '提供下载体验'
+    : '案例资料展示';
+
+const hasLinks = game.data.downloadLinks.length > 0 || Boolean(game.data.externalPage);
+const primaryDownload = game.data.downloadLinks.find((link) => link.url !== game.data.embedUrl);
+const heroStats = [
+  { label: '阶段', value: gameStatusLabels[game.data.status] ?? game.data.status },
+  { label: '引擎', value: game.data.engine },
+  { label: '平台', value: game.data.platforms.slice(0, 2).join(' / ') || '待补充' },
+  { label: '体验', value: game.data.playableWeb ? '可在线试玩' : hasLinks ? '可下载体验' : '案例展示' }
+];
+const playtestCopy = {
+  title: '先看节奏，再进试玩',
+  summary: '这段视频是直接进入局内后的真实运行片段，适合快速判断操作反馈、界面信息和玩法密度。'
+};
+const playtestStats = [
+  { label: '录制来源', value: '真实运行画面' },
+  { label: '默认语言', value: '中文流程' },
+  { label: '展示重点', value: game.data.playableWeb ? '真实局内试玩' : '当前完成度' }
+];
+const readingTime = estimateReadingTime(game.body ?? '');
+const gameUrl = toSiteUrl(`/games/${game.id}`, Astro.site);
+const authorSchema = getAuthorSchema(Astro.site);
+const gameSameAs = [game.data.externalPage, game.data.repoUrl].filter((url): url is string => Boolean(url));
+const gameSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  '@id': `${gameUrl}#game`,
+  name: game.data.title,
+  description: game.data.summary,
+  image: getImageUrl(game.data.thumbnail, Astro.site),
+  url: gameUrl,
+  datePublished: game.data.pubDate.toISOString(),
+  dateModified: (game.data.updatedDate ?? game.data.pubDate).toISOString(),
+  author: authorSchema,
+  creator: authorSchema,
+  gamePlatform: game.data.platforms,
+  keywords: game.data.tags,
+  genre: game.data.tags,
+  sameAs: gameSameAs.length > 0 ? gameSameAs : undefined,
+  inLanguage: 'zh-CN'
+};
+const hasWorkflow = game.data.aiWorkflow.length > 0;
+const hasCoreLoop = game.data.coreLoop.length > 0;
+const tocHeadings = [
+  ...headings,
+  ...(hasCoreLoop ? [{ depth: 2, slug: 'core-loop', text: '核心循环' }] : []),
+  ...(game.data.playableWeb ? [{ depth: 2, slug: 'play', text: '在线试玩' }] : []),
+  ...(hasWorkflow ? [{ depth: 2, slug: 'ai-workflow', text: 'AI 开发工作流' }] : []),
+  ...(game.data.screenshots.length > 0 ? [{ depth: 2, slug: 'screenshots', text: '截图集' }] : [])
+];
+---
+
+<BaseLayout
+  title={`${game.data.title} | 项目案例`}
+  description={game.data.summary}
+  image={game.data.thumbnail}
+  type="article"
+  structuredData={gameSchema}
+>
+  <Breadcrumbs items={[{ label: '首页', href: '/' }, { label: '游戏', href: '/games' }, { label: game.data.title }]} />
+  <article class="content-layout">
+    <div class="content-main">
+      <header
+        class={`content-header card content-header--game project-hero project-hero--${game.id}`}
+        style={`--project-accent: ${hero.accent}; --project-accent-2: ${hero.accent2}; --project-rgb: ${hero.rgb};`}
+      >
+        <div class="content-header-copy">
+          <p class="eyebrow">{heroKicker}</p>
+          <h1>{game.data.title}</h1>
+          <p>{game.data.summary}</p>
+          <div class="tag-list">
+            {game.data.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+          <div class="project-persona-strip" aria-label="项目定位">
+            <span><strong>定位</strong>{heroIdentity}</span>
+            <span><strong>证据</strong>{heroProof}</span>
+            {game.data.aiTools.length > 0 ? (
+              <span><strong>AI 工具</strong>{game.data.aiTools.join(' / ')}</span>
+            ) : null}
+          </div>
+          <div class="project-hero-stats" aria-label="项目关键状态">
+            {heroStats.map((item) => (
+              <div>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </div>
+            ))}
+          </div>
+          <div class="project-hero-actions">
+            {game.data.playableWeb && game.data.embedUrl ? (
+              <a class="button" href="#play">进入在线试玩</a>
+            ) : null}
+            {game.data.playtestVideo ? (
+              <a class="button--ghost" href="#playtest">查看试玩视频</a>
+            ) : null}
+            {game.data.repoUrl ? (
+              <a class="button--ghost" href={game.data.repoUrl} target="_blank" rel="noopener noreferrer">查看仓库</a>
+            ) : null}
+          </div>
+        </div>
+
+        {game.data.thumbnail ? (
+          <div class="content-header-visual project-hero-visual">
+            <img src={withBase(game.data.thumbnail)} alt={game.data.title} loading="eager" decoding="async" fetchpriority="high" />
+            <div class="project-hero-visual-overlay" aria-hidden="true">
+              <span>{heroIdentity}</span>
+              <strong>{heroProof}</strong>
+            </div>
+          </div>
+        ) : null}
+      </header>
+
+      {allGames.length > 1 && (
+        <nav class="card project-switcher" aria-label="项目导航">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Project Lineup</p>
+              <h2>全部游戏</h2>
+              <p class="content-meta">每个游戏一个陈列页：核心循环、截图集和 AI 开发工作流。</p>
+            </div>
+          </div>
+          <div class="project-switcher-grid">
+            {allGames.map((item, index) => {
+              const palette = heroPalette[index % heroPalette.length];
+              return (
+                <a
+                  class:list={['project-switcher-card', item.id === game.id && 'is-active']}
+                  href={withBase(`/games/${item.id}`)}
+                  style={`--project-accent: ${palette.accent}; --project-accent-2: ${palette.accent2}; --project-rgb: ${palette.rgb};`}
+                >
+                  {item.data.thumbnail ? (
+                    <img src={withBase(item.data.thumbnail)} alt="" loading="lazy" decoding="async" />
+                  ) : null}
+                  <span>{item.data.role ?? 'Game Case'}</span>
+                  <strong>{item.data.title}</strong>
+                  <small>{item.data.tags.slice(0, 2).join(' / ') || item.data.summary}</small>
+                </a>
+              );
+            })}
+          </div>
+        </nav>
+      )}
+
+      {game.data.playtestVideo ? (
+        <section id="playtest" class="card project-playtest-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Playtest Video</p>
+              <h2>试玩视频</h2>
+              <p class="content-meta">真实运行录制，用来快速观察玩法节奏、界面状态和当前完成度。</p>
+            </div>
+          </div>
+          <div class="project-playtest-shell">
+            <div class="project-playtest-copy">
+              <span class="playtest-status-dot">实机录制</span>
+              <h3>{playtestCopy.title}</h3>
+              <p>{playtestCopy.summary}</p>
+              <div class="project-playtest-stats">
+                {playtestStats.map((item) => (
+                  <div>
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div class="project-playtest-media">
+              <video
+                controls
+                playsinline
+                preload="metadata"
+                poster={game.data.playtestPoster ? withBase(game.data.playtestPoster) : undefined}
+              >
+                <source src={withBase(game.data.playtestVideo)} type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {game.data.playableWeb ? (
+        <GameEmbed title={game.data.title} embedUrl={game.data.embedUrl} />
+      ) : (
+        <section class="card game-fallback-note">
+          <div class="section-heading">
+            <h2>当前展示方式</h2>
+          </div>
+          <p>这个项目当前以案例页和截图为主。后续如果补到稳定的 Web 导出或下载包，再把体验入口挂进来。</p>
+        </section>
+      )}
+
+      {hasCoreLoop && (
+        <div id="core-loop">
+          <CoreLoop
+            steps={game.data.coreLoop}
+            punchline={game.data.loopPunchline}
+            accent={hero.accent}
+          />
+        </div>
+      )}
+
+      <section class="card game-highlight-band">
+        <div class="mini-panel">
+          <p class="eyebrow">设计目标</p>
+          <p>{game.data.challenge ?? game.data.description}</p>
+        </div>
+        <div class="mini-panel">
+          <p class="eyebrow">核心机制</p>
+          <p>{game.data.coreLoop.map((step) => step.label).join(' → ') || game.data.summary}</p>
+        </div>
+        <div class="mini-panel">
+          <p class="eyebrow">我的职责</p>
+          <p>{game.data.role ?? '待补充'}</p>
+        </div>
+        <div class="mini-panel">
+          <p class="eyebrow">当前结论</p>
+          <p>{game.data.outcome ?? '项目仍在迭代中，阶段结论会随版本更新继续补齐。'}</p>
+        </div>
+      </section>
+
+      {hasWorkflow && (
+        <div id="ai-workflow">
+          <AiWorkflow steps={game.data.aiWorkflow} note={game.data.workflowNote} accent={hero.accent2} />
+        </div>
+      )}
+
+      {game.data.milestones.length > 0 && (
+        <section class="card">
+          <div class="section-heading">
+            <div>
+              <h2>阶段里程碑</h2>
+              <p class="content-meta">按版本节点呈现项目的成形过程。</p>
+            </div>
+          </div>
+          <div class="milestone-list">
+            {game.data.milestones.map((milestone) => (
+              <article class="milestone-item">
+                <p class="eyebrow">{formatDate(milestone.date)}</p>
+                <h3>{milestone.title}</h3>
+                <p>{milestone.summary}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {game.body && game.body.trim().length > 0 && (
+        <section class="prose-block prose-block--game">
+          <Content />
+        </section>
+      )}
+
+      {game.data.screenshots.length > 0 && (
+        <section id="screenshots" class="card">
+          <div class="section-heading">
+            <div>
+              <h2>截图集</h2>
+              <p class="content-meta">展示对理解玩法最有帮助的界面和运行画面。</p>
+            </div>
+          </div>
+          <div class="screenshot-grid screenshot-grid--rich">
+            {game.data.screenshots.map((shot, index) => (
+              <figure class="screenshot-card screenshot-card--image">
+                <img src={withBase(shot.src)} alt={`${game.data.title} 截图 ${index + 1}`} loading="lazy" decoding="async" />
+                <figcaption>
+                  <p class="eyebrow">Scene {index + 1}</p>
+                  <strong>{shot.title}</strong>
+                  {shot.note ? <span>{shot.note}</span> : null}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {relatedGames.length > 0 && (
+        <section class="card">
+          <div class="section-heading">
+            <div>
+              <h2>更多游戏</h2>
+              <p class="content-meta">同类标签下的其他项目。</p>
+            </div>
+          </div>
+          <div class="link-list">
+            {relatedGames.map((item) => (
+              <a href={withBase(`/games/${item.id}`)}>{item.data.title}</a>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+
+    <aside class="content-sidebar card">
+      <section>
+        <div class="section-heading">
+          <h2>项目速览</h2>
+        </div>
+        <div class="meta-grid">
+          <div class="mini-panel">
+            <p class="eyebrow">首次记录</p>
+            <p>{formatDate(game.data.pubDate)}</p>
+          </div>
+          <div class="mini-panel">
+            <p class="eyebrow">最近更新</p>
+            <p>{game.data.updatedDate ? formatDate(game.data.updatedDate) : formatDate(game.data.pubDate)}</p>
+          </div>
+          <div class="mini-panel">
+            <p class="eyebrow">阶段</p>
+            <p>{gameStatusLabels[game.data.status] ?? game.data.status}</p>
+          </div>
+          <div class="mini-panel">
+            <p class="eyebrow">引擎</p>
+            <p>{game.data.engine}</p>
+          </div>
+          <div class="mini-panel">
+            <p class="eyebrow">团队规模</p>
+            <p>{game.data.teamSize}</p>
+          </div>
+          <div class="mini-panel">
+            <p class="eyebrow">平台</p>
+            <p>{game.data.platforms.join(' / ') || '待补充'}</p>
+          </div>
+          <div class="mini-panel">
+            <p class="eyebrow">截图</p>
+            <p>{game.data.screenshots.length} 张</p>
+          </div>
+          <div class="mini-panel">
+            <p class="eyebrow">体验方式</p>
+            <p>{game.data.playableWeb ? '可在线试玩' : hasLinks ? '可通过外链或下载体验' : '案例页展示'}</p>
+          </div>
+          {game.data.aiTools.length > 0 && (
+            <div class="mini-panel">
+              <p class="eyebrow">AI 工具</p>
+              <p>{game.data.aiTools.join(' / ')}</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <ContentToc headings={tocHeadings} />
+
+      {game.data.contribution.length > 0 && (
+        <section>
+          <div class="section-heading">
+            <h2>主要工作</h2>
+          </div>
+          <ul class="timeline-list">
+            {game.data.contribution.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {game.data.nextStep.length > 0 && (
+        <section>
+          <div class="section-heading">
+            <h2>下一步</h2>
+          </div>
+          <ul class="timeline-list">
+            {game.data.nextStep.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {hasLinks && (
+        <section>
+          <div class="section-heading">
+            <h2>体验入口</h2>
+          </div>
+          {game.data.downloadLinks.length > 0 && (
+            <div class="download-list download-list--stacked">
+              {game.data.downloadLinks.map((link) => (
+                <a href={withBase(link.url)} target="_blank" rel="noopener noreferrer">{link.label}</a>
+              ))}
+            </div>
+          )}
+          {game.data.externalPage && (
+            <div class="link-list link-list--stacked">
+              <a href={game.data.externalPage} target="_blank" rel="noopener noreferrer">查看外部项目页</a>
+            </div>
+          )}
+          {!game.data.externalPage && game.data.repoUrl && (
+            <div class="link-list link-list--stacked">
+              <a href={game.data.repoUrl} target="_blank" rel="noopener noreferrer">查看源码仓库</a>
+            </div>
+          )}
+        </section>
+      )}
+    </aside>
+  </article>
+</BaseLayout>
