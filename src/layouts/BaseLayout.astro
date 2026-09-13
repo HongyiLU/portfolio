@@ -27,7 +27,13 @@ const {
   structuredData
 } = Astro.props;
 
-const canonical = Astro.site ? toSiteUrl(canonicalPath ?? Astro.url.pathname, Astro.site) : Astro.url.toString();
+// Astro.url.pathname 在子路径部署时已含 base 前缀；去掉后再交给 toSiteUrl 统一补前缀，避免 /base/base 重复
+const basePrefix = import.meta.env.BASE_URL.replace(/\/+$/, '');
+const rawPathname =
+  basePrefix && Astro.url.pathname.startsWith(basePrefix)
+    ? Astro.url.pathname.slice(basePrefix.length) || '/'
+    : Astro.url.pathname;
+const canonical = Astro.site ? toSiteUrl(canonicalPath ?? rawPathname, Astro.site) : Astro.url.toString();
 const imageUrl = image
   ? Astro.site
     ? toSiteUrl(image, Astro.site)
