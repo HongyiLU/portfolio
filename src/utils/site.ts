@@ -45,3 +45,12 @@ export function toSiteUrl(path: string, site: URL | undefined): string {
   const normalizedPath = isPassthroughPath(basedPath) ? basedPath : withTrailingSlash(basedPath);
   return new URL(normalizedPath, site ?? 'https://your-portfolio.example.com').toString();
 }
+
+// Astro.url.pathname 在 base 部署时已含 base 前缀；先剥离，避免 toSiteUrl 再次拼接出 /base/base
+export function withoutBase(pathname: string): string {
+  const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+  if (base && (pathname === base || pathname.startsWith(`${base}/`))) {
+    return pathname.slice(base.length) || '/';
+  }
+  return pathname;
+}

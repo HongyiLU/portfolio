@@ -1,5 +1,5 @@
 ---
-import { toSiteUrl, withBase } from '../utils/site';
+import { toSiteUrl, withBase, withoutBase } from '../utils/site';
 import { serializeJsonLd } from '../utils/schema';
 
 interface Item {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { items = [] } = Astro.props;
-const currentUrl = Astro.site ? toSiteUrl(Astro.url.pathname, Astro.site) : Astro.url.toString();
+const currentUrl = Astro.site ? toSiteUrl(withoutBase(Astro.url.pathname), Astro.site) : Astro.url.toString();
 const breadcrumbJson = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',

@@ -49,7 +49,7 @@ npm run verify
 src/content/games/*.md    每款游戏一个 Markdown（数据即内容），当前收录 Stellaris Web
 src/components/           CoreLoop / AiWorkflow / GameEmbed 等页面模块
 src/pages/games/[slug].   游戏陈列页模板
-public/images/games/      截图、封面、工作流配图
-public/games/<slug>/      内嵌试玩的游戏本体（如 stellaris-web，Vite build 后复制进来）
+public/images/games/      截图、封面、工作流配图（注意：游戏本体在 public/play/，避免与陈列页路由冲突）
+public/play/<slug>/       内嵌试玩的游戏本体（如 stellaris-web，Vite build 后复制进来）
 docs/                     新增游戏的数据模板
 ```

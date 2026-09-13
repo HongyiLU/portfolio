@@ -25,7 +25,7 @@ screenshots:
     title: 星系面板：占领之后的核心决策点
     note: 部署/升级算力矩阵、出征劫掠、侦察守军都在这里完成。
 playableWeb: true
-embedUrl: /games/stellaris-web/index.html
+embedUrl: /play/stellaris-web/index.html
 repoUrl: https://github.com/HongyiLU/stellaris-web
 role: 玩法与系统设计 / 数值与经济设计 / 验收标准制定
 teamSize: 单人（AI 全程实现）

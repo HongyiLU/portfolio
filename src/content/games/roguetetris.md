@@ -25,7 +25,7 @@ screenshots:
     title: 波次间的三选一构筑界面
     note: 强化从随机池抽取，效果以修饰器形式叠加到引擎参数上。
 playableWeb: true
-embedUrl: /games/roguetetris/index.html
+embedUrl: /play/roguetetris/index.html
 repoUrl: https://github.com/HongyiLU/RogueTetris
 role: 玩法设计 / 肉鸽节奏设计 / 数值与升级池设计
 teamSize: 单人（AI 全程实现）
