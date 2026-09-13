@@ -25,12 +25,14 @@ function resolveHref(target) {
   }
   const [withoutHash] = target.split('#');
   if (!withoutHash) return null;
-  const clean = decodeURIComponent(withoutHash.split('?')[0]);
-  if (path.isAbsolute(clean)) {
-    // 站点以 / 部署；若使用子路径 BASE_PATH，这里同样按根处理
-    return path.join(distDir, clean.replace(/^\/+/, ''));
+  let clean = decodeURIComponent(withoutHash.split('?')[0]);
+  if (!path.isAbsolute(clean)) return null;
+  // 子路径部署（BASE_PATH）时，链接以 /<base>/ 开头；剥离后再映射到 dist 根
+  const base = (process.env.BASE_PATH || '/').replace(/\/+$/, '');
+  if (base && base !== '/' && (clean === base || clean.startsWith(`${base}/`))) {
+    clean = clean.slice(base.length) || '/';
   }
-  return null;
+  return path.join(distDir, clean.replace(/^\/+/, ''));
 }
 
 const htmlFiles = (await walkFiles(distDir)).filter((file) => file.endsWith('.html'));
