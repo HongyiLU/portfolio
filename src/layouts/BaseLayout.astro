@@ -72,12 +72,7 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
   <body>
     <div class="scroll-progress" aria-hidden="true"></div>
     <div id="boot-overlay" class="boot-overlay" hidden aria-hidden="true">
-      <div class="boot-term">
-        <p style="--boot-i: 0"><b>&gt;</b> ESTABLISHING LINK ...... OK</p>
-        <p style="--boot-i: 1"><b>&gt;</b> LOADING GAME ARCHIVE ...... OK</p>
-        <p style="--boot-i: 2"><b>&gt;</b> CORE LOOP MODULE .......... READY</p>
-        <p style="--boot-i: 3"><b>&gt;</b> WELCOME, VISITOR_</p>
-      </div>
+      <div class="boot-term" id="boot-term"></div>
     </div>
     <a class="skip-link" href="#main-content">跳到主要内容</a>
     <div class="page-shell">
@@ -88,31 +83,57 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
       <Footer />
     </div>
     <script>
-      // 开机序列：每会话一次；reduced-motion 或二次访问直接跳过
+      // 开机序列：每次刷新播放（站内 View Transitions 切换不重播）；reduced-motion 跳过
       function initPageFeatures() {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const boot = document.getElementById('boot-overlay');
       let bootPlayed = false;
-      if (boot && !prefersReducedMotion && !sessionStorage.getItem('bootDone')) {
+      const typeBootLine = (line, el) => new Promise((done) => {
+        let i = 0;
+        const timer = setInterval(() => {
+          el.textContent = line.slice(0, ++i);
+          if (i >= line.length) { clearInterval(timer); done(); }
+        }, 20);
+      });
+      if (boot && !prefersReducedMotion && !window.__booted) {
         boot.hidden = false;
         document.documentElement.classList.add('booting');
         bootPlayed = true;
-        setTimeout(() => {
+        const term = boot.querySelector('#boot-term');
+        const lines = [
+          'ESTABLISHING LINK ...... OK',
+          'LOADING GAME ARCHIVE ... OK',
+          'CORE LOOP MODULE ....... READY',
+          'WELCOME, VISITOR_'
+        ];
+        (async () => {
+          for (const line of lines) {
+            const p = document.createElement('p');
+            p.innerHTML = '<b>&gt;</b> ';
+            const span = document.createElement('span');
+            p.append(span);
+            term.append(p);
+            await typeBootLine(line, span);
+            await new Promise((r) => setTimeout(r, 200));
+          }
+          await new Promise((r) => setTimeout(r, 450));
+          boot.classList.add('boot-fade');
+          await new Promise((r) => setTimeout(r, 380));
           boot.remove();
           document.documentElement.classList.remove('booting');
-          sessionStorage.setItem('bootDone', '1');
-        }, 2150);
+        })();
+        window.__booted = true;
       } else {
         boot?.remove();
       }
 
-      // 打字机 Hero 标题（仅首页；同会话只打一次）
+      // 打字机 Hero 标题（仅首页；每次刷新随开机序列重播）
       const heroTitle = document.querySelector('.home-banner h1');
-      if (heroTitle && !prefersReducedMotion && !sessionStorage.getItem('typed')) {
+      if (heroTitle && !prefersReducedMotion && !window.__typed) {
         const text = heroTitle.textContent;
         heroTitle.setAttribute('aria-label', text);
         heroTitle.textContent = '';
-        const typingDelay = bootPlayed ? 2.25 : 0.15;
+        const typingDelay = bootPlayed ? 3.0 : 0.15;
         [...text].forEach((char, index) => {
           const span = document.createElement('span');
           span.className = 'type-ch';
@@ -124,7 +145,7 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
         cursor.className = 'type-cursor';
         cursor.style.setProperty('--type-at', `${typingDelay + text.length * 0.055}s`);
         heroTitle.append(cursor);
-        sessionStorage.setItem('typed', '1');
+        window.__typed = true;
       }
 
       // 顶部滚动进度线

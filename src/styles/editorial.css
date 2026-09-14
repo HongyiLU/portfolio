@@ -4070,7 +4070,6 @@ button,
   display: grid;
   place-items: center;
   background: #05080f;
-  animation: boot-out 0.32s ease 1.7s forwards;
 }
 
 .boot-overlay[hidden] {
@@ -4083,8 +4082,6 @@ button,
   font-size: 0.95rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  opacity: 0;
-  animation: boot-line 0.01s steps(1) calc(var(--boot-i) * 0.4s) forwards;
 }
 
 .boot-term b {
@@ -4092,10 +4089,9 @@ button,
   font-weight: 900;
 }
 
-@keyframes boot-line {
-  to {
-    opacity: 1;
-  }
+/* JS 打完最后一行后追加 .boot-fade 触发整层淡出 */
+.boot-overlay.boot-fade {
+  animation: boot-out 0.38s ease forwards;
 }
 
 @keyframes boot-out {
