@@ -1863,6 +1863,7 @@ button,
 .home-featured-projects .card.game-card {
   display: grid;
   grid-template-columns: 128px minmax(0, 1fr);
+  column-gap: 16px;
   min-height: 190px;
 }
 
@@ -4421,13 +4422,14 @@ html.booting {
 .card.game-card {
   border-top: 1px solid var(--line);
   border-radius: 0;
+  padding: 12px 14px;
   transition:
     background 0.25s ease,
     box-shadow 0.25s ease;
 }
 
 .game-card .card-body {
-  padding: 14px 2px 4px;
+  padding: 14px 0 0;
 }
 
 .card.game-card:hover {
@@ -4442,7 +4444,7 @@ html.booting {
   border-top: 1px solid var(--line);
   border-radius: 0;
   box-shadow: none;
-  padding: 14px 2px;
+  padding: 12px 14px;
 }
 
 .play-lane-card:hover {
@@ -4533,7 +4535,7 @@ html.booting {
   border-top: 1px solid var(--line);
   border-radius: 0;
   box-shadow: none;
-  padding: 14px 2px 0;
+  padding: 14px 14px 0;
 }
 
 /* 截图卡去盒（保图注浮层） */
@@ -4624,11 +4626,11 @@ html.booting {
   box-shadow: none;
 }
 
-/* 特写与图库卡：顶部细线条目化 */
+/* 特写与图库卡：顶部细线条目化，内容内缩 */
 .archive-feature-card,
 .project-gallery-card {
   border-top: 1px solid var(--line);
-  padding: 12px 0 0;
+  padding: 12px 14px 0;
   transition:
     background 0.25s ease,
     box-shadow 0.25s ease;
