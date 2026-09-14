@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ArchiveFilter from '../../components/ArchiveFilter.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import GameCard from '../../components/GameCard.astro';
 import { withBase } from '../../utils/site';
@@ -37,16 +36,6 @@ const palette = [
 const projectPlaytestCards = games
   .filter((game) => game.data.playtestVideo)
   .map((game, index) => ({ game, tone: palette[index % palette.length] }));
-const filterGroups = [
-  { label: '精选游戏', value: 'featured' },
-  { label: '持续迭代', value: 'ongoing' },
-  { label: '可玩验证', value: 'playable' },
-  { label: '展示版本', value: 'showcase' },
-  { label: '休闲小游戏', value: 'casual' },
-  { label: '策略玩法', value: 'strategy' },
-  { label: '射击玩法', value: 'shooter' },
-  { label: '网页游戏', value: 'web' }
-];
 const pageDescription = '游戏策划的作品陈列馆：每款游戏一个陈列页，包含核心循环拆解、截图集和 AI 开发工作流。';
 const collectionSchema = getCollectionPageSchema({
   site: Astro.site,
@@ -71,11 +60,10 @@ const collectionSchema = getCollectionPageSchema({
       <h1>游戏陈列馆</h1>
       <p>每款游戏一个陈列页：核心循环怎么转、真实截图长什么样、以及它如何被设计并用 AI 做成可玩版本。</p>
       <div class="button-row">
-        <a class="button" href="#games-archive-search">筛选游戏</a>
         {webDemoGames[0]?.data.embedUrl ? (
-          <a class="button button--ghost" href="#playtest-matrix">试玩切片</a>
+          <a class="button" href={withBase(webDemoGames[0].data.embedUrl)} target="_blank" rel="noopener noreferrer">▶ 直接开玩 {webDemoGames[0].data.title}</a>
         ) : (
-          <a class="button button--ghost" href={withBase('/about')}>关于我</a>
+          <a class="button" href={withBase('/about')}>关于我</a>
         )}
       </div>
       <div class="archive-metrics">
@@ -137,46 +125,24 @@ const collectionSchema = getCollectionPageSchema({
     </section>
   )}
 
-  <ArchiveFilter
-    id="games-archive"
-    placeholder="搜索游戏名称、玩法、职责、平台或标签"
-    chips={filterGroups}
-    emptyMessage="没有找到匹配的游戏，可以试试别的关键词或项目阶段。"
-  />
-
-  <section class="grid grid--cards-lg" data-filter-target="games-archive">
+  <section class="grid grid--cards-lg">
     {games.map((game) => (
-      <div
-        class="filter-item-shell"
-        data-filter-item
-        data-search={`${game.data.title} ${game.data.summary} ${game.data.description} ${game.data.role ?? ''} ${game.data.platforms.join(' ')} ${game.data.tags.join(' ')} ${gameStatusLabels[game.data.status] ?? game.data.status}`}
-        data-groups={[
-          game.data.status,
-          game.data.featured ? 'featured' : '',
-          game.data.playableWeb || game.data.status === 'playable' ? 'playable' : '',
-          game.data.tags.some((tag) => /casual|休闲|益智|puzzle/i.test(tag)) ? 'casual' : '',
-          game.data.tags.some((tag) => /策略|strategy|rogue/i.test(tag)) ? 'strategy' : '',
-          game.data.tags.some((tag) => /shooter|射击/i.test(tag)) ? 'shooter' : '',
-          /web|html|js/i.test(game.data.engine) || game.data.playableWeb ? 'web' : ''
-        ].filter(Boolean).join('|')}
-      >
-        <GameCard
-          slug={game.id}
-          href={`/games/${game.id}`}
-          title={game.data.title}
-          summary={game.data.summary}
-          description={game.data.description}
-          status={game.data.status}
-          role={game.data.role}
-          platforms={game.data.platforms}
-          playableWeb={game.data.playableWeb}
-          thumbnail={game.data.thumbnail}
-          featured={game.data.featured}
-          screenshotCount={game.data.screenshots.length}
-          engine={game.data.engine}
-          playUrl={game.data.embedUrl}
-        />
-      </div>
+      <GameCard
+        slug={game.id}
+        href={`/games/${game.id}`}
+        title={game.data.title}
+        summary={game.data.summary}
+        description={game.data.description}
+        status={game.data.status}
+        role={game.data.role}
+        platforms={game.data.platforms}
+        playableWeb={game.data.playableWeb}
+        thumbnail={game.data.thumbnail}
+        featured={game.data.featured}
+        screenshotCount={game.data.screenshots.length}
+        engine={game.data.engine}
+        playUrl={game.data.embedUrl}
+      />
     ))}
   </section>
 
