@@ -4228,22 +4228,32 @@ html.booting {
 
 /* ================= 导航终端化 + 卡片终端读数 ================= */
 
-/* —— 品牌区命令提示符 —— */
-.brand-prompt {
+/* —— 品牌锁排：slogan + 站名 —— */
+.brand-slogan {
+  display: block;
   font-family: 'Cascadia Mono', 'Consolas', ui-monospace, 'Courier New', monospace;
   color: var(--accent-yellow);
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.brand-cursor {
-  display: inline-block;
-  width: 0.45em;
-  height: 0.9em;
-  margin-left: 4px;
-  vertical-align: -0.12em;
-  background: var(--accent-yellow);
+.brand-glyph {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+
+.brand-glyph .glyph-cursor {
   animation: cursor-blink 1.1s steps(2) infinite;
+}
+
+.brand-copy {
+  display: grid;
+  gap: 3px;
+  justify-items: start;
 }
 
 /* —— 导航链接命令前缀 —— */
@@ -4359,6 +4369,187 @@ html.booting {
 
 .nav-links a:hover {
   background: var(--accent-yellow-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-links a::after {
+    transition: none;
+  }
+}
+
+/* ================= 去卡片化：排版驱动的统一界面（CS 式） ================= */
+
+/* 内容面板全部落到页面底色上；只保留功能性窗体（试玩窗体） */
+.card:not(.game-embed) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+.card:not(.game-embed)::before,
+.card:not(.game-embed)::after {
+  display: none;
+}
+
+.card:not(.game-embed):hover {
+  transform: none;
+  box-shadow: inset 0 0 0 0 transparent;
+}
+
+/* 页面节奏：区块间距放大，用留白和标语分区 */
+.page-main {
+  gap: 44px;
+}
+
+/* 区块标题压上细线，代替盒子的分隔职能 */
+.section-heading {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+/* 首屏舞台：去边框，保持氛围渐变 */
+.home-banner {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 游戏卡片：编辑部式条目（顶部细线 + hover 黄色左边线） */
+.card.game-card {
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.game-card .card-body {
+  padding: 14px 2px 4px;
+}
+
+.card.game-card:hover {
+  background: rgba(255, 214, 10, 0.035);
+  box-shadow: inset 3px 0 0 var(--accent-yellow);
+}
+
+/* 试玩车道卡片同款 */
+.play-lane-card {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 14px 2px;
+}
+
+.play-lane-card:hover {
+  background: rgba(255, 214, 10, 0.035);
+  box-shadow: inset 3px 0 0 var(--accent-yellow);
+}
+
+/* 侧栏：旁注式（细线左缘） */
+.content-sidebar {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+.content-sidebar::before {
+  display: none;
+}
+
+/* 小信息面板：终端旁注 */
+.mini-panel {
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--line-strong);
+  border-radius: 0;
+  padding: 2px 0 2px 12px;
+}
+
+/* 页脚融入底色 */
+.site-footer {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  padding: 30px 0 0;
+}
+
+.site-footer::before {
+  display: none;
+}
+
+/* 文章块与页面标题区 */
+.prose-block,
+.page-heading {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+.prose-block::before,
+.page-heading::before {
+  display: none;
+}
+
+.page-heading.archive-hero {
+  background: transparent;
+}
+
+/* 游戏页 hero 与横幅装饰板去盒 */
+.content-header {
+  padding: 0;
+}
+
+.project-switcher-card {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.project-switcher-card.is-active {
+  border-top-color: var(--accent-yellow);
+}
+
+/* 关于页装饰卡去盒 */
+.positioning-card,
+.about-method-card {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 14px 2px 0;
+}
+
+/* 截图卡去盒（保图注浮层） */
+.screenshot-card--image {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+/* 里程碑条目：旁注式 */
+.milestone-item {
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--line-strong);
+  border-radius: 0;
+  padding: 4px 0 4px 14px;
 }
 
 @media (prefers-reduced-motion: reduce) {
