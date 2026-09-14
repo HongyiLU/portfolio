@@ -4387,7 +4387,8 @@ html.booting {
   box-shadow: none;
   backdrop-filter: none;
   border-radius: 0;
-  padding: 0;
+  /* 无边框容器仍需要内边距：内容不贴容器边界 */
+  padding: 22px 24px;
 }
 
 .card:not(.game-embed)::before,
@@ -4402,7 +4403,7 @@ html.booting {
 
 /* 页面节奏：区块间距放大，用留白和标语分区 */
 .page-main {
-  gap: 44px;
+  gap: 10px;
 }
 
 /* 区块标题压上细线，代替盒子的分隔职能 */
@@ -4459,7 +4460,7 @@ html.booting {
   box-shadow: none;
   backdrop-filter: none;
   border-radius: 0;
-  padding: 0;
+  padding: 22px 24px;
 }
 
 .content-sidebar::before {
@@ -4483,7 +4484,7 @@ html.booting {
   box-shadow: none;
   backdrop-filter: none;
   border-radius: 0;
-  padding: 30px 0 0;
+  padding: 30px 24px 0;
 }
 
 .site-footer::before {
@@ -4498,7 +4499,6 @@ html.booting {
   box-shadow: none;
   backdrop-filter: none;
   border-radius: 0;
-  padding: 0;
 }
 
 .prose-block::before,
@@ -4508,11 +4508,6 @@ html.booting {
 
 .page-heading.archive-hero {
   background: transparent;
-}
-
-/* 游戏页 hero 与横幅装饰板去盒 */
-.content-header {
-  padding: 0;
 }
 
 .project-switcher-card {
@@ -4590,17 +4585,17 @@ html.booting {
   padding: 40px var(--gutter) 46px;
 }
 
-/* 卡片条目内边距与沟槽对齐（去掉之前的 2px 杂边） */
+/* 卡片条目内边距：内容距卡缘 14px */
 .game-card .card-body {
-  padding: 16px 0 4px;
+  padding: 14px 0 0;
 }
 
 .play-lane-card {
-  padding: 14px 0;
+  padding: 12px 14px;
 }
 
 .site-footer {
-  padding: 30px 0 0;
+  padding: 30px 24px 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
