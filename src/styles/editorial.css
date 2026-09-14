@@ -4554,25 +4554,51 @@ html.booting {
 
 /* ================= 顶格满幅：无边框容器 ================= */
 
-/* 页面壳：满幅顶格，无边缘留白 */
-.page-shell {
-  width: 100%;
-  padding: 0 0 30px;
+/* 统一沟槽：全站唯一的水平对齐权威 */
+:root {
+  --gutter: clamp(18px, 3vw, 44px);
 }
 
-/* 导航栏：无边框的悬浮模糊条，紧贴顶边 */
+/* 页面壳：限宽 + 统一沟槽，内容不再贴死屏幕边 */
+.page-shell {
+  width: min(1480px, 100%);
+  margin-inline: auto;
+  padding: 0 var(--gutter) 34px;
+}
+
+/* 导航栏：满幅无边框模糊条，内容对齐沟槽 */
 .site-nav {
   top: 0;
-  background: rgba(5, 8, 15, 0.72);
+  margin: 0 calc(-1 * var(--gutter));
+  background: rgba(5, 8, 15, 0.75);
   backdrop-filter: blur(16px);
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  padding: 13px 18px;
+  padding: 13px var(--gutter);
 }
 
 .site-nav::after {
   display: none;
+}
+
+/* Hero 是唯一满幅破格的舞台：负边距抵消沟槽，内部文字仍对齐沟槽 */
+.home-banner {
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 40px var(--gutter) 46px;
+}
+
+/* 卡片条目内边距与沟槽对齐（去掉之前的 2px 杂边） */
+.game-card .card-body {
+  padding: 16px 0 4px;
+}
+
+.play-lane-card {
+  padding: 14px 0;
+}
+
+.site-footer {
+  padding: 30px 0 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
