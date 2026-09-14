@@ -4406,10 +4406,10 @@ html.booting {
   gap: 10px;
 }
 
-/* 区块标题压上细线，代替盒子的分隔职能 */
+/* 区块标题：无框，仅靠留白与字号分层 */
 .section-heading {
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 12px;
+  border-bottom: 0;
+  padding-bottom: 4px;
 }
 
 /* 首屏舞台：去边框，保持氛围渐变 */
