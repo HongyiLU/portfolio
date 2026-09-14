@@ -2606,7 +2606,7 @@ button,
 
 .content-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.95fr);
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 272px);
   gap: 18px;
   background: transparent;
   border: 0;
