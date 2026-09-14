@@ -12,7 +12,18 @@ const currentPath = normalizePath(Astro.url.pathname);
 
 <nav class="site-nav" aria-label="主导航">
   <a class="brand" href={withBase('/')}>
-    <span class="brand-mark">A</span>
+    <svg class="brand-logo" viewBox="0 0 44 44" aria-hidden="true">
+      <defs>
+        <linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#13253f"></stop>
+          <stop offset="1" stop-color="#0a1425"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="1.5" y="1.5" width="41" height="41" rx="10" fill="url(#logo-bg)" stroke="rgba(96, 170, 255, 0.4)"></rect>
+      <path d="M13 32.5 L21 11" stroke="#eef4fb" stroke-width="3.2" stroke-linecap="round" fill="none"></path>
+      <path d="M21 11 L29 32.5" stroke="#eef4fb" stroke-width="3.2" stroke-linecap="round" fill="none"></path>
+      <path d="M16.8 24 L25.6 28 L16.8 32 Z" fill="#ffd60a"></path>
+    </svg>
     <span class="brand-copy">
       <strong>{siteMeta.name}</strong>
       <small><span class="brand-prompt">adam@portfolio:~$</span> 卢竑邑 Adam<i class="brand-cursor" aria-hidden="true"></i></small>

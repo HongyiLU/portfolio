@@ -4289,3 +4289,81 @@ html.booting {
     animation: none;
   }
 }
+
+/* ================= 导航栏翻新：悬浮终端栏 ================= */
+
+/* LOGO 徽章（播放键 A）+ hover 光晕 */
+.brand-logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  flex: none;
+  filter: drop-shadow(0 0 0 rgba(255, 214, 10, 0));
+  transition:
+    filter 0.25s ease,
+    transform 0.25s ease;
+}
+
+.brand:hover .brand-logo {
+  filter: drop-shadow(0 0 10px rgba(255, 214, 10, 0.35));
+  transform: translateY(-1px);
+}
+
+/* 悬浮吸附 + 底部信号灯线 */
+.site-nav {
+  position: sticky;
+  top: 10px;
+  z-index: 50;
+  padding: 12px 20px;
+}
+
+.site-nav::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(77, 195, 255, 0.5) 30%,
+    rgba(255, 214, 10, 0.5) 70%,
+    transparent
+  );
+}
+
+/* 链接：黄色下划线扫入 + 悬停底色 */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 8px;
+  height: 2px;
+  background: var(--accent-yellow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.nav-links a[aria-current='page']::after {
+  transform: scaleX(1);
+  background: linear-gradient(90deg, var(--accent-yellow), var(--accent));
+}
+
+.nav-links a:hover {
+  background: var(--accent-yellow-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-links a::after {
+    transition: none;
+  }
+}
+
