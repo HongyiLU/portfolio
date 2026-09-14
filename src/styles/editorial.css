@@ -2280,7 +2280,7 @@ button,
 }
 
 .card-media-meta span {
-  §PROTECT§ rgba(17, 31, 51, 0.72);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.9rem;
 }
 
@@ -2457,7 +2457,7 @@ button,
 }
 
 .project-gallery-copy span {
-  §PROTECT§ rgba(17, 31, 51, 0.74);
+  color: rgba(255, 255, 255, 0.74);
   line-height: 1.65;
 }
 
@@ -2746,7 +2746,7 @@ button,
 }
 
 .project-hero-visual-overlay span {
-  §PROTECT§ rgba(17, 31, 51, 0.68);
+  color: rgba(255, 255, 255, 0.68);
   font-size: 0.76rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -2838,7 +2838,7 @@ button,
 }
 
 .project-switcher-card span {
-  §PROTECT§ rgba(17, 31, 51, 0.68);
+  color: rgba(255, 255, 255, 0.68);
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -2851,7 +2851,7 @@ button,
 }
 
 .project-switcher-card small {
-  §PROTECT§ rgba(17, 31, 51, 0.76);
+  color: rgba(255, 255, 255, 0.76);
   line-height: 1.45;
 }
 
@@ -3049,6 +3049,8 @@ button,
   position: relative;
   overflow: hidden;
   padding: 0;
+  /* 确定高度：否则 img 的 height:100% 在 auto 高度父容器里塌陷为 0 */
+  aspect-ratio: 16 / 10;
 }
 
 .screenshot-card--image figcaption {
@@ -3068,7 +3070,7 @@ button,
 }
 
 .screenshot-card--image figcaption span {
-  §PROTECT§ rgba(17, 31, 51, 0.72);
+  color: rgba(255, 255, 255, 0.78);
   font-size: 0.92rem;
 }
 
