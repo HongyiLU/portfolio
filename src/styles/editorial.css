@@ -4225,3 +4225,67 @@ html.booting {
     animation: none;
   }
 }
+
+/* ================= 导航终端化 + 卡片终端读数 ================= */
+
+/* —— 品牌区命令提示符 —— */
+.brand-prompt {
+  font-family: 'Cascadia Mono', 'Consolas', ui-monospace, 'Courier New', monospace;
+  color: var(--accent-yellow);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brand-cursor {
+  display: inline-block;
+  width: 0.45em;
+  height: 0.9em;
+  margin-left: 4px;
+  vertical-align: -0.12em;
+  background: var(--accent-yellow);
+  animation: cursor-blink 1.1s steps(2) infinite;
+}
+
+/* —— 导航链接命令前缀 —— */
+.nav-links a::before {
+  content: '> ';
+  color: rgba(150, 172, 200, 0.45);
+  font-family: 'Cascadia Mono', 'Consolas', ui-monospace, 'Courier New', monospace;
+}
+
+.nav-links a:hover::before,
+.nav-links a[aria-current='page']::before {
+  color: var(--accent-yellow);
+}
+
+.nav-links a[aria-current='page'] {
+  color: var(--text-strong);
+}
+
+/* —— 游戏卡片 hover 终端读数（clip-path steps 打字效果） —— */
+.game-card .game-card-track {
+  font-family: 'Cascadia Mono', 'Consolas', ui-monospace, 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: var(--accent-yellow);
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.7s steps(28) 0.05s;
+}
+
+.game-card:hover .game-card-track,
+.game-card:focus-within .game-card-track {
+  clip-path: inset(0 -2% 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-card .game-card-track {
+    clip-path: inset(0 0 0 0);
+    transition: none;
+  }
+
+  .brand-cursor {
+    animation: none;
+  }
+}

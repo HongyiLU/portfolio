@@ -1,6 +1,7 @@
 ﻿---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/editorial.css';
 import { siteMeta } from '../utils/site-meta';
 import { toSiteUrl, withBase, withoutBase } from '../utils/site';
@@ -58,6 +59,7 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
     <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={`${siteMeta.name} RSS`} href={withBase('/rss.xml')} />
     <link rel="icon" type="image/svg+xml" href={withBase(siteMeta.favicon)} />
@@ -87,6 +89,7 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
     </div>
     <script>
       // 开机序列：每会话一次；reduced-motion 或二次访问直接跳过
+      function initPageFeatures() {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const boot = document.getElementById('boot-overlay');
       let bootPlayed = false;
@@ -131,7 +134,10 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
           const max = document.documentElement.scrollHeight - window.innerHeight;
           progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
         };
-        window.addEventListener('scroll', setProgress, { passive: true });
+        if (!window.__progressBound) {
+          window.__progressBound = true;
+          window.addEventListener('scroll', setProgress, { passive: true });
+        }
         setProgress();
       }
 
@@ -190,6 +196,8 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
           observer.observe(el);
         }
       }
+      }
+      document.addEventListener('astro:page-load', initPageFeatures);
     </script>
   </body>
 </html>

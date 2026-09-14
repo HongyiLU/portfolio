@@ -15,7 +15,7 @@ const currentPath = normalizePath(Astro.url.pathname);
     <span class="brand-mark">A</span>
     <span class="brand-copy">
       <strong>{siteMeta.name}</strong>
-      <small>{siteMeta.parentBrand} · {siteMeta.tagline}</small>
+      <small><span class="brand-prompt">adam@portfolio:~$</span> 卢竑邑 Adam<i class="brand-cursor" aria-hidden="true"></i></small>
     </span>
   </a>
   <div class="nav-links">
@@ -24,7 +24,7 @@ const currentPath = normalizePath(Astro.url.pathname);
       const isActive = currentPath === normalizePath(href);
 
       return (
-        <a href={href} aria-current={isActive ? 'page' : undefined}>{link.label}</a>
+        <a href={href} aria-current={isActive ? 'page' : undefined} data-cmd={link.href === '/' ? 'cd ~' : `cd ${link.href}`}>{link.label}</a>
       );
     })}
   </div>

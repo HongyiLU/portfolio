@@ -100,7 +100,7 @@ const accentStyle = accent
     </div>
 
     <div class="game-card-foot">
-      <span class="game-card-track">{playableWeb ? '可直接试玩，也适合当作品集入口' : '当前以案例和截图展示为主'}</span>
+      <span class="game-card-track">&gt; ACCESS /games/{slug ?? 'game'} // {playableWeb ? 'PLAYABLE BUILD' : 'CASE FILE'}</span>
       <div class="card-actions">
         {playableWeb && playUrl ? (
           <a class="button button--small" href={withBase(playUrl)} target="_blank" rel="noopener noreferrer">立即试玩</a>
