@@ -3944,6 +3944,11 @@ button,
 .js-reveal.is-revealed {
   opacity: 1;
   transform: none;
+  /* panel-boot 辉光的终态 box-shadow 会在无边框元素上留下一圈细线，
+     因此辉光脉冲只保留给真正的盒体（试玩窗体） */
+}
+
+.card.game-embed.is-revealed {
   animation: panel-boot 820ms ease both;
 }
 
