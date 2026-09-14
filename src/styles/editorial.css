@@ -4053,3 +4053,175 @@ button,
   color: var(--accent-yellow);
   opacity: 0.55;
 }
+
+/* ================= CS 深度致敬：机器感交互层 ================= */
+
+/* —— 开机启动序列 —— */
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  background: #05080f;
+  animation: boot-out 0.32s ease 1.7s forwards;
+}
+
+.boot-overlay[hidden] {
+  display: none;
+}
+
+.boot-term p {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: boot-line 0.01s steps(1) calc(var(--boot-i) * 0.4s) forwards;
+}
+
+.boot-term b {
+  color: var(--accent-yellow);
+  font-weight: 900;
+}
+
+@keyframes boot-line {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes boot-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+html.booting {
+  overflow: hidden;
+}
+
+/* —— 打字机标题 —— */
+.type-ch {
+  opacity: 0;
+  animation: type-in 0.01s steps(1) var(--type-at) forwards;
+}
+
+.type-cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.95em;
+  margin-left: 0.1em;
+  vertical-align: -0.08em;
+  background: var(--accent-yellow);
+  opacity: 0;
+  animation:
+    type-in 0.01s steps(1) var(--type-at) forwards,
+    cursor-blink 1.1s steps(2) var(--type-at) infinite;
+}
+
+@keyframes type-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cursor-blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* —— 标语 hover 故障（CS 霓虹粉色差） —— */
+.section-statement {
+  transition: text-shadow 0.15s ease;
+}
+
+.section-statement:hover {
+  text-shadow: 3px 0 0 rgba(240, 39, 94, 0.85), -3px 0 0 rgba(56, 224, 200, 0.85);
+  animation: glitch-jitter 0.3s steps(2) 2;
+}
+
+@keyframes glitch-jitter {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px) skewX(-2deg); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-1px) skewX(1.5deg); }
+  100% { transform: translateX(0); }
+}
+
+/* —— 警戒条纹 —— */
+.section-statement::after {
+  content: '';
+  display: block;
+  width: 136px;
+  height: 8px;
+  margin-top: 12px;
+  background: repeating-linear-gradient(-45deg, var(--accent-yellow) 0 9px, var(--ink) 9px 18px);
+}
+
+/* —— 滚动进度线 —— */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 95;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-yellow), var(--accent));
+  box-shadow: 0 0 12px rgba(255, 214, 10, 0.45);
+  pointer-events: none;
+}
+
+/* —— 页脚巨型描边字 —— */
+.footer-mega {
+  margin: 20px 0 -14px;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 214, 10, 0.5);
+  user-select: none;
+  overflow: hidden;
+}
+
+.footer-mega span {
+  color: var(--accent-yellow);
+  -webkit-text-stroke: 0;
+  opacity: 0.9;
+}
+
+/* —— CYCLE 计数器 —— */
+.cycle-counter {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cycle-counter .cycle-key {
+  color: var(--accent-yellow);
+}
+
+/* —— reduced-motion 全量关闭 —— */
+@media (prefers-reduced-motion: reduce) {
+  .boot-overlay,
+  .type-cursor {
+    display: none;
+  }
+
+  .type-ch {
+    opacity: 1;
+    animation: none;
+  }
+
+  .section-statement:hover {
+    text-shadow: none;
+    animation: none;
+  }
+}

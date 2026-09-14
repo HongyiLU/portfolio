@@ -68,6 +68,15 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
     <title>{title}</title>
   </head>
   <body>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <div id="boot-overlay" class="boot-overlay" hidden aria-hidden="true">
+      <div class="boot-term">
+        <p style="--boot-i: 0"><b>&gt;</b> ESTABLISHING LINK ...... OK</p>
+        <p style="--boot-i: 1"><b>&gt;</b> LOADING GAME ARCHIVE ...... OK</p>
+        <p style="--boot-i: 2"><b>&gt;</b> CORE LOOP MODULE .......... READY</p>
+        <p style="--boot-i: 3"><b>&gt;</b> WELCOME, VISITOR_</p>
+      </div>
+    </div>
     <a class="skip-link" href="#main-content">跳到主要内容</a>
     <div class="page-shell">
       <Nav />
@@ -77,8 +86,63 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
       <Footer />
     </div>
     <script>
-      // 滚动入场：模块进入视口时"上浮 + 描边辉光"上线，网格子项错峰
+      // 开机序列：每会话一次；reduced-motion 或二次访问直接跳过
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const boot = document.getElementById('boot-overlay');
+      let bootPlayed = false;
+      if (boot && !prefersReducedMotion && !sessionStorage.getItem('bootDone')) {
+        boot.hidden = false;
+        document.documentElement.classList.add('booting');
+        bootPlayed = true;
+        setTimeout(() => {
+          boot.remove();
+          document.documentElement.classList.remove('booting');
+          sessionStorage.setItem('bootDone', '1');
+        }, 2150);
+      } else {
+        boot?.remove();
+      }
+
+      // 打字机 Hero 标题（仅首页；同会话只打一次）
+      const heroTitle = document.querySelector('.home-banner h1');
+      if (heroTitle && !prefersReducedMotion && !sessionStorage.getItem('typed')) {
+        const text = heroTitle.textContent;
+        heroTitle.setAttribute('aria-label', text);
+        heroTitle.textContent = '';
+        const typingDelay = bootPlayed ? 2.25 : 0.15;
+        [...text].forEach((char, index) => {
+          const span = document.createElement('span');
+          span.className = 'type-ch';
+          span.textContent = char;
+          span.style.setProperty('--type-at', `${typingDelay + index * 0.055}s`);
+          heroTitle.append(span);
+        });
+        const cursor = document.createElement('span');
+        cursor.className = 'type-cursor';
+        cursor.style.setProperty('--type-at', `${typingDelay + text.length * 0.055}s`);
+        heroTitle.append(cursor);
+        sessionStorage.setItem('typed', '1');
+      }
+
+      // 顶部滚动进度线
+      const progress = document.querySelector('.scroll-progress');
+      if (progress) {
+        const setProgress = () => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+        };
+        window.addEventListener('scroll', setProgress, { passive: true });
+        setProgress();
+      }
+
+      // CYCLE 计数器（站点上线天数）
+      const cycleDay = document.getElementById('cycle-day');
+      if (cycleDay) {
+        const days = Math.max(1, Math.floor((Date.now() - new Date('2026-09-12T00:00:00+08:00').getTime()) / 86400000) + 1);
+        cycleDay.textContent = String(days).padStart(3, '0');
+      }
+
+      // 滚动入场：模块进入视口时"上浮 + 描边辉光"上线，网格子项错峰
       const gridSelectors = [
         '.grid--cards-lg',
         '.play-lane',
