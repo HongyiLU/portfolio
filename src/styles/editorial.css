@@ -4607,3 +4607,49 @@ html.booting {
   }
 }
 
+
+/* ================= 去盒收尾：清残留盒子 ================= */
+
+/* 通用去盒 */
+.archive-feature-card,
+.project-gallery-card,
+.about-signal-card,
+.about-now-item,
+.project-persona-strip span,
+.project-hero-stats div,
+.archive-metrics span {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 特写与图库卡：顶部细线条目化 */
+.archive-feature-card,
+.project-gallery-card {
+  border-top: 1px solid var(--line);
+  padding: 12px 0 0;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.archive-feature-card:hover,
+.project-gallery-card:hover {
+  background: rgba(255, 214, 10, 0.035);
+  box-shadow: inset 3px 0 0 var(--accent-yellow);
+}
+
+/* 当前状态条目：旁注式 */
+.about-now-item {
+  border-left: 2px solid var(--line-strong);
+  padding: 6px 0 6px 12px;
+}
+
+/* 陈列页 hero 元信息：细线压底代替盒子 */
+.project-persona-strip span,
+.project-hero-stats div,
+.archive-metrics span {
+  border-bottom: 1px solid var(--line);
+  padding: 6px 12px;
+}
