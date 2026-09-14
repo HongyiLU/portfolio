@@ -18,10 +18,10 @@ aiTools:
   - Claude Code
 thumbnail: /images/games/roguetetris-cover.svg
 screenshots:
-  - src: /images/games/roguetetris-shot-1.svg
+  - src: /images/games/roguetetris-shot-1.png
     title: 局内：棋盘、波次目标与 HUD
     note: 经典方块底座保留了 SRS 旋转、Ghost 落点、Hold 与 Next 队列。
-  - src: /images/games/roguetetris-shot-2.svg
+  - src: /images/games/roguetetris-shot-2.png
     title: 波次间的三选一构筑界面
     note: 强化从随机池抽取，效果以修饰器形式叠加到引擎参数上。
 playableWeb: true

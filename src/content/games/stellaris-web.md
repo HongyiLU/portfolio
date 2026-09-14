@@ -18,11 +18,11 @@ aiTools:
   - Claude Code
 thumbnail: /images/games/stellaris-web-cover.svg
 screenshots:
-  - src: /images/games/stellaris-web-shot-1.svg
+  - src: /images/games/stellaris-web-shot-1.jpg
     title: 3D 银河视图：恒星光谱着色、航道网络与领土范围
     note: 银河 ↔ 星系两级缩放，旋臂星系按种子确定性生成。
-  - src: /images/games/stellaris-web-shot-2.svg
-    title: 星系面板：占领之后的核心决策点
+  - src: /images/games/stellaris-web-shot-2.jpg
+    title: 星系面板：选中星系后的核心决策点
     note: 部署/升级算力矩阵、出征劫掠、侦察守军都在这里完成。
 playableWeb: true
 embedUrl: /play/stellaris-web/index.html
