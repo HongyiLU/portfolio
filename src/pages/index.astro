@@ -14,6 +14,7 @@ const homeGames = featuredGames.length > 0 ? featuredGames : games.slice(0, 3);
 
 const playableCount = games.filter((item) => item.data.playableWeb).length;
 const homePlayableGames = games.filter((item) => item.data.playableWeb).slice(0, 3);
+const primaryPlayable = games.find((item) => item.data.playableWeb && item.data.embedUrl);
 const loopShotCount = games.reduce((sum, item) => sum + item.data.screenshots.length, 0);
 
 const homeUrl = toSiteUrl('/', Astro.site);
@@ -40,13 +41,18 @@ const homeSchema = [
       <h1>我设计的游戏，都能直接玩。</h1>
       <p>每款游戏一个陈列页：核心循环怎么转、真实截图长什么样、以及从设计稿到可玩版本的 AI 开发工作流。</p>
       <div class="button-row">
-        <a class="button" href={withBase('/games')}>查看全部游戏</a>
-        <a class="button button--ghost" href={withBase('/about')}>关于我</a>
+        <a class="button" href={withBase('/games')}>进入游戏陈列馆</a>
+        {primaryPlayable ? (
+          <a class="button button--ghost" href={withBase(primaryPlayable.data.embedUrl)} target="_blank" rel="noopener noreferrer">▶ 直接开玩 {primaryPlayable.data.title}</a>
+        ) : (
+          <a class="button button--ghost" href={withBase('/about')}>关于我</a>
+        )}
       </div>
       <div class="tag-list">
         <span>{games.length} 款游戏</span>
         <span>{playableCount} 个试玩入口</span>
         <span>{loopShotCount} 张真实截图</span>
+        <span>AI 开发工作流</span>
       </div>
     </div>
 
@@ -80,6 +86,8 @@ const homeSchema = [
     </div>
   </section>
 
+  <p class="section-statement" aria-hidden="true">OUT NOW</p>
+
   {homePlayableGames.length > 0 && (
     <section class="card home-play-section">
       <div class="section-heading">
@@ -111,6 +119,8 @@ const homeSchema = [
       </div>
     </section>
   )}
+
+  <p class="section-statement" aria-hidden="true">SELECTED WORKS</p>
 
   <section class="card home-featured-projects">
     <div class="section-heading">
