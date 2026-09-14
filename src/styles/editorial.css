@@ -4552,6 +4552,29 @@ html.booting {
   padding: 4px 0 4px 14px;
 }
 
+/* ================= 顶格满幅：无边框容器 ================= */
+
+/* 页面壳：满幅顶格，无边缘留白 */
+.page-shell {
+  width: 100%;
+  padding: 0 0 30px;
+}
+
+/* 导航栏：无边框的悬浮模糊条，紧贴顶边 */
+.site-nav {
+  top: 0;
+  background: rgba(5, 8, 15, 0.72);
+  backdrop-filter: blur(16px);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 13px 18px;
+}
+
+.site-nav::after {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav-links a::after {
     transition: none;
