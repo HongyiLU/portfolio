@@ -169,6 +169,11 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
         cycleDay.textContent = String(days).padStart(3, '0');
       }
 
+      // 标语故障相位错开：每条标语错开 1.9 秒，避免同时闪烁
+      document.querySelectorAll('.section-statement').forEach((el, index) => {
+        el.style.setProperty('--glitch-delay', `${(index * 1.9).toFixed(1)}s`);
+      });
+
       // 滚动入场：模块进入视口时"上浮 + 描边辉光"上线，网格子项错峰
       const gridSelectors = [
         '.grid--cards-lg',

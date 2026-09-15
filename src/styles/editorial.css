@@ -4136,9 +4136,31 @@ html.booting {
   }
 }
 
-/* —— 标语 hover 故障（CS 霓虹粉色差） —— */
+/* —— 标语故障：定时循环 + hover 强化 —— */
 .section-statement {
   transition: text-shadow 0.15s ease;
+  /* 7 秒周期：开头约 0.8 秒色差抖动，其余时间待机；相位由 JS 按序错开 */
+  animation: glitch-cycle 7s steps(1, end) infinite;
+  animation-delay: var(--glitch-delay, 0s);
+}
+
+@keyframes glitch-cycle {
+  0% {
+    text-shadow: 3px 0 0 rgba(240, 39, 94, 0.85), -3px 0 0 rgba(56, 224, 200, 0.85);
+  }
+
+  4% {
+    text-shadow: -3px 0 0 rgba(240, 39, 94, 0.85), 3px 0 0 rgba(56, 224, 200, 0.85);
+  }
+
+  8% {
+    text-shadow: 2px 0 0 rgba(240, 39, 94, 0.7), -2px 0 0 rgba(56, 224, 200, 0.7);
+  }
+
+  12%,
+  100% {
+    text-shadow: none;
+  }
 }
 
 .section-statement:hover {
@@ -4224,6 +4246,10 @@ html.booting {
 
   .section-statement:hover {
     text-shadow: none;
+    animation: none;
+  }
+
+  .section-statement {
     animation: none;
   }
 }
