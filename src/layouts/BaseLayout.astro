@@ -1,6 +1,7 @@
 ﻿---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CursorFX from '../components/CursorFX.astro';
 import { ClientRouter } from 'astro:transitions';
 import '../styles/editorial.css';
 import { siteMeta } from '../utils/site-meta';
@@ -70,6 +71,7 @@ const structuredDataItems = structuredData ? (Array.isArray(structuredData) ? st
     <title>{title}</title>
   </head>
   <body>
+    <CursorFX />
     <div class="scroll-progress" aria-hidden="true"></div>
     <div id="boot-overlay" class="boot-overlay" hidden aria-hidden="true">
       <div class="boot-term" id="boot-term"></div>
