@@ -43,7 +43,7 @@ export const profileFocusAreas = [
   {
     title: '作品表达与展示',
     ratio: '20%',
-    summary: '把每个项目整理成核心循环、截图集和工作流三层结构，让玩家和设计者都能快速看懂设计意图。'
+    summary: '把每个项目拆成核心循环、截图集与工作流三层，让玩家玩得明白、看得尽兴。'
   }
 ] as const;
 
