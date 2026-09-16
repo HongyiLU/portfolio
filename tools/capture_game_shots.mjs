@@ -158,23 +158,6 @@ try {
     console.log('✓ assemble-shot-2.jpg（修理台）');
     await page.close();
   }
-
-  // ---------- 墓前在线 tomb-online（低保真原型，手机框 UI） ----------
-  if (want('tomb-online')) {
-    const page = await browser.newPage({ viewport: { width: 1360, height: 850 } });
-    await page.goto(`${BASE}/play/tomb-online/index.html`, { waitUntil: 'load' });
-    await page.waitForTimeout(900);
-    await page.screenshot({ path: path.join(OUT, 'tomb-online-shot-1.jpg'), type: 'jpeg', quality: 88 });
-    console.log('✓ tomb-online-shot-1.jpg（墓园主界面）');
-    const goBtn = page.locator('[data-go]').first();
-    if (await goBtn.count()) {
-      await goBtn.click();
-      await page.waitForTimeout(600);
-      await page.screenshot({ path: path.join(OUT, 'tomb-online-shot-2.jpg'), type: 'jpeg', quality: 88 });
-      console.log('✓ tomb-online-shot-2.jpg（二级界面）');
-    }
-    await page.close();
-  }
 } finally {
   await browser.close();
 }
