@@ -229,14 +229,7 @@ const tocHeadings = [
 
       {game.data.playableWeb ? (
         <GameEmbed title={game.data.title} embedUrl={game.data.embedUrl} />
-      ) : (
-        <section class="card game-fallback-note">
-          <div class="section-heading">
-            <h2>当前展示方式</h2>
-          </div>
-          <p>这个项目当前以案例页和截图为主。后续如果补到稳定的 Web 导出或下载包，再把体验入口挂进来。</p>
-        </section>
-      )}
+      ) : null}
 
       {hasCoreLoop && (
         <div id="core-loop">
