@@ -3,6 +3,7 @@ title: 旧物来信（Assemble）
 summary: 治愈系物品修理游戏：经营街角修理铺，检查、拆卸、修复承载回忆的旧物，在零件之间读懂物主没有说出口的故事。
 description: 三章 3D 网页版（旧怀表/旧相机/音乐盒）：修理规则仿真与 Three.js 渲染分离、版本化存档与损坏恢复、Playwright 桌面/移动/真实画布 e2e 测试。
 pubDate: 2026-09-16
+updatedDate: 2026-09-16
 status: playable
 featured: false
 tags:
@@ -71,6 +72,9 @@ milestones:
   - date: 2026-09-16
     title: MVP-01 三章可玩版
     summary: 三章 3D 网页版（旧怀表/旧相机/音乐盒）端到端可玩，单元测试与 e2e 覆盖修理规则、存档容错与真实画布操作。
+  - date: 2026-09-16
+    title: 工具交互升级：精确准星 + 手持工具模型
+    summary: 40px 工具图标改为 24px 精确准星（悬停可操作零件变金色），四种工具以程序化 Three.js 手持模型跟随指针并播放动作——点击精度与操作表现同时收口。
 ---
 
 参考《Assemble with Care》的高层体验（以修复物品推进人物关系），但角色、剧情、物品结构与谜题全部原创。
