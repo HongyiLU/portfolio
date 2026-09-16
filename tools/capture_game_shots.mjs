@@ -132,6 +132,32 @@ try {
     }
     await page.close();
   }
+
+  // ---------- 旧物来信 Assemble（Three.js，信件 + 修理台） ----------
+  if (want('assemble')) {
+    const page = await browser.newPage({ viewport: { width: 1360, height: 850 } });
+    await page.goto(`${BASE}/play/assemble/index.html`, { waitUntil: 'load' });
+    await page.waitForTimeout(2500);
+    // 首页 → 顾客来信
+    await page.click('#continue-button').catch(() => {});
+    await page.waitForTimeout(900);
+    await page.screenshot({ path: path.join(OUT, 'assemble-shot-1.jpg'), type: 'jpeg', quality: 88 });
+    console.log('✓ assemble-shot-1.jpg（顾客来信）');
+    // 进修理台，跳到中段修理阶段
+    await page.click('#enter-workshop').catch(() => {});
+    await page.waitForTimeout(2800); // 等 3D 场景初始化
+    await page.evaluate(() => {
+      const api = window.__oldObject3DPrototype;
+      if (api?.goToStep) api.goToStep(3);
+    });
+    await page.waitForTimeout(1400);
+    // 3D 软渲染下 page.screenshot 会等不到稳定帧，改用 CDP 强制截屏
+    const client = await page.context().newCDPSession(page);
+    const { data } = await client.send('Page.captureScreenshot', { format: 'jpeg', quality: 88 });
+    (await import('node:fs')).writeFileSync(path.join(OUT, 'assemble-shot-2.jpg'), Buffer.from(data, 'base64'));
+    console.log('✓ assemble-shot-2.jpg（修理台）');
+    await page.close();
+  }
 } finally {
   await browser.close();
 }

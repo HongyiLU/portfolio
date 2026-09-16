@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2118"/>
+      <stop offset="1" stop-color="#171008"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="0.5" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffb454" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#ffb454" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="watch" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8c98a"/>
+      <stop offset="1" stop-color="#a67c3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#lamp)"/>
+  <!-- 工作台面 -->
+  <rect y="560" width="1280" height="160" fill="#241a10"/>
+  <rect y="560" width="1280" height="6" fill="#3d2c1a"/>
+  <!-- 信封 -->
+  <g transform="translate(880,470) rotate(-4)">
+    <rect width="230" height="140" rx="8" fill="#efe3cc"/>
+    <path d="M0 8 L115 78 L230 8" fill="none" stroke="#c9b48c" stroke-width="3"/>
+    <rect x="86" y="52" width="58" height="40" rx="3" fill="#d94f4f" opacity="0.85"/>
+  </g>
+  <!-- 怀表 -->
+  <g transform="translate(430,330)">
+    <circle r="118" fill="none" stroke="#5a4526" stroke-width="14"/>
+    <circle r="118" fill="url(#watch)"/>
+    <circle r="96" fill="#f7ecd4"/>
+    <circle r="96" fill="none" stroke="#8a6a3a" stroke-width="3"/>
+    <g stroke="#6b4f2a" stroke-width="4" stroke-linecap="round">
+      <line x1="0" y1="-78" x2="0" y2="-64"/>
+      <line x1="78" y1="0" x2="64" y2="0"/>
+      <line x1="0" y1="78" x2="0" y2="64"/>
+      <line x1="-78" y1="0" x2="-64" y2="0"/>
+    </g>
+    <line x1="0" y1="0" x2="0" y2="-52" stroke="#3d2c14" stroke-width="6" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="38" y2="26" stroke="#3d2c14" stroke-width="5" stroke-linecap="round"/>
+    <circle r="9" fill="#3d2c14"/>
+    <circle cx="118" cy="0" r="14" fill="#a67c3f"/>
+  </g>
+  <!-- 散落零件 -->
+  <g fill="#c9a35f">
+    <circle cx="250" cy="620" r="10"/>
+    <circle cx="300" cy="640" r="6"/>
+    <path d="M640 630 l16 8 -16 8 -16 -8 Z"/>
+    <rect x="700" y="622" width="34" height="7" rx="3" transform="rotate(18 700 622)"/>
+  </g>
+  <!-- 螺丝刀 -->
+  <g transform="translate(700,690) rotate(-14)">
+    <rect x="0" y="-5" width="120" height="10" rx="5" fill="#b44a3a"/>
+    <rect x="120" y="-3" width="60" height="6" rx="3" fill="#8a8f9c"/>
+  </g>
+  <text x="100" y="120" font-family="sans-serif" font-size="56" font-weight="700" fill="#f5ead8">旧物来信</text>
+  <text x="100" y="176" font-family="sans-serif" font-size="25" fill="#c9a35f">治愈系物品修理 · 检查 / 拆卸 / 修复 / 解锁回忆</text>
+  <text x="100" y="646" font-family="sans-serif" font-size="17" fill="#8a7452">Assemble · 灵感参考《Assemble with Care》，原创角色与剧情</text>
+</svg>

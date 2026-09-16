@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#c99b68" />
+  <title>旧物来信 · 3D 交互原型</title>
+  <script type="module" crossorigin src="./assets/index-7iUaR26r.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-9vq-t3IU.css">
+</head>
+<body>
+  <main id="app" aria-live="polite">
+    <section id="loading" class="screen active" aria-label="加载中">
+      <div class="loading-content">
+        <div class="watch-loader" aria-hidden="true"><i></i></div>
+        <p class="eyebrow">3D 原型正在准备</p>
+        <p>点亮工作台……</p>
+      </div>
+    </section>
+
+    <section id="load-error" class="screen" aria-label="加载失败">
+      <article class="paper-card">
+        <p class="eyebrow">加载错误状态</p>
+        <h2>零件箱还没有送到</h2>
+        <p class="muted">3D 场景没有准备成功。当前进度仍保留在本机。</p>
+        <div class="actions">
+          <button class="primary" data-action="retry-load">重新尝试</button>
+          <button class="secondary" data-action="home">返回首页</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="home" class="screen" aria-label="首页">
+      <article class="paper-card hero-card">
+        <p class="eyebrow">三封来信 · THREE.JS 互动修理</p>
+        <h1>旧物来信</h1>
+        <p class="hero-copy">有些东西停了下来，<br />并不代表它们已经走到结尾。</p>
+        <div class="chapter-grid" aria-label="选择关卡">
+          <button class="chapter-card" data-action="new-game" data-level="watch"><span>第一章</span><strong>停住的时间</strong><small>旧怀表</small></button>
+          <button class="chapter-card" data-action="new-game" data-level="camera"><span>第二章</span><strong>没有洗出的夏天</strong><small>旧相机</small></button>
+          <button class="chapter-card" data-action="new-game" data-level="music-box"><span>第三章</span><strong>迟到的摇篮曲</strong><small>音乐盒</small></button>
+        </div>
+        <div class="actions compact-actions">
+          <button id="continue-button" class="secondary" data-action="continue" disabled>继续上次进度</button>
+          <button class="ghost" data-action="settings">设置</button>
+        </div>
+        <div class="prototype-note">可操作 3D 模型 · 临时程序化资产 · 非最终美术</div>
+      </article>
+    </section>
+
+    <section id="letter" class="screen" aria-label="顾客来信">
+      <article class="paper-card letter-card">
+        <p class="eyebrow">来信 · <span id="letter-date">9 月 15 日</span></p>
+        <h2 id="letter-title">停住的时间</h2>
+        <p>你好，修理师：</p>
+        <div id="letter-body"><p>这只怀表停了很多年。它属于一个总是迟到的人。</p></div>
+        <p id="letter-signature" class="signature">—— 林女士</p>
+        <div class="actions">
+          <button id="enter-workshop" class="primary" data-action="enter-workshop">查看怀表</button>
+          <button class="ghost" data-action="home">稍后再修</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="workshop" class="screen workshop" aria-label="3D 修理台">
+      <canvas id="scene" aria-label="可交互的三维修理物件"></canvas>
+      <header class="topbar">
+        <div>
+          <p class="chapter-label"><span id="chapter-title">停住的时间</span> · <span id="step-count">步骤 1 / 8</span></p>
+          <h2 id="step-title">打开怀表后盖</h2>
+        </div>
+        <div class="top-actions">
+          <button class="round-button" data-action="reset-camera" aria-label="重置相机" title="重置相机">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7v5h5M5.5 11a7 7 0 111.7 5.4"/></svg>
+          </button>
+          <button class="round-button" data-action="pause" aria-label="暂停">Ⅱ</button>
+        </div>
+      </header>
+
+      <aside class="tool-rail" aria-label="左侧工具栏">
+        <span class="rail-label">工具</span>
+        <button class="tool" data-tool="inspect" aria-label="观察模式">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 24s6-11 17-11 17 11 17 11-6 11-17 11S7 24 7 24z"/><circle cx="24" cy="24" r="5"/></svg>
+          <span>观察</span>
+        </button>
+        <button class="tool" data-tool="screwdriver" disabled aria-label="螺丝刀">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M30 6l12 12-6 6-5-5-16 16-6 2 2-6 16-16-5-5 8-4zM8 40l5-5"/></svg>
+          <span>螺丝刀</span>
+        </button>
+        <button class="tool" data-tool="tweezers" disabled aria-label="镊子">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 7c4 13 9 23 19 34M35 7c-4 13-9 23-19 34M11 7h5M32 7h5"/></svg>
+          <span>镊子</span>
+        </button>
+        <button id="brush-tool" class="tool" data-tool="brush" disabled aria-label="软刷">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M31 5l12 12-19 19-12-12L31 5zM12 24c-5 5-7 12-7 18 6 0 13-2 18-7M8 37l5 5M12 32l7 7"/></svg>
+          <span>软刷</span>
+        </button>
+        <button class="tool" data-tool="cloth" disabled aria-label="擦拭布">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 13l28-5 4 27-29 5-3-27zM13 18c7 1 13-1 18-5M17 35c6-5 12-7 20-7"/></svg>
+          <span>擦拭布</span>
+        </button>
+        <button class="hint-button" data-action="hint" aria-label="需要提示">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 20a8 8 0 1114 5c-3 3-5 4-5 8h-4c0-6 3-8 6-11a4 4 0 10-7-2h-4z"/><circle cx="23" cy="39" r="2.5"/></svg>
+          <span>提示</span>
+        </button>
+      </aside>
+
+      <div class="view-mode" id="view-mode">拖动空白处可旋转观察 · 滚轮可缩放</div>
+      <div class="instruction" id="instruction">点击金色后盖，把它打开。</div>
+      <div class="tray-label" aria-hidden="true">零件托盘</div>
+    </section>
+
+    <section id="ending" class="screen" aria-label="修理完成">
+      <article class="paper-card ending-card">
+        <div class="success-mark">✓</div>
+        <p class="eyebrow">修理完成</p>
+        <h2 id="ending-title">时间重新开始走了</h2>
+        <blockquote id="ending-quote">表盖内侧刻着同一个日期。那不是分别的日子，而是他们第一次见面的日子。</blockquote>
+        <div id="ending-body" class="ending-story muted">
+          <p>第二天，林女士回来取表。</p>
+        </div>
+        <div class="actions centered">
+          <button class="primary" data-action="finish-home">回到修理铺</button>
+          <button class="ghost" data-action="restart">重新体验</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div id="settings-modal" class="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <p class="eyebrow">偏好设置</p>
+      <h2 id="settings-title">让工作台更舒服</h2>
+      <label class="setting"><span>音效音量</span><input id="volume" type="range" min="0" max="100" value="65" /></label>
+      <label class="setting"><span>减弱动画</span><input id="reduce-motion" type="checkbox" /></label>
+      <label class="setting"><span>自动显示提示</span><input id="auto-hint" type="checkbox" checked /></label>
+      <div class="actions"><button class="primary" data-action="close-settings">完成</button></div>
+    </section>
+  </div>
+
+  <div id="pause-modal" class="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+      <p class="eyebrow">工作暂停</p>
+      <h2 id="pause-title">修理物会在这里等你</h2>
+      <div class="actions vertical">
+        <button class="primary" data-action="resume">继续修理</button>
+        <button class="secondary" data-action="settings">设置</button>
+        <button class="ghost" data-action="pause-home">保存并返回首页</button>
+        <button class="danger" data-action="confirm-restart">重新开始</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="confirm-modal" class="modal-backdrop" hidden>
+    <section class="modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
+      <p class="eyebrow">确认操作</p>
+      <h2 id="confirm-title">重新开始这次修理？</h2>
+      <p class="muted">当前检查点之后的操作将被清除。</p>
+      <div class="actions">
+        <button class="danger" data-action="restart">重新开始</button>
+        <button class="ghost" data-action="cancel-restart">取消</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <details class="debug">
+    <summary>原型工具</summary>
+    <div class="debug-panel">
+      <strong>3D 评审控制</strong>
+      <span id="debug-state">screen: loading · step: 0</span>
+      <button data-debug="previous">上一步</button>
+      <button data-debug="next">下一步</button>
+      <button data-debug="load-error">模拟加载错误</button>
+      <button data-debug="context-loss">模拟渲染提示</button>
+      <button data-debug="reset">清空状态</button>
+    </div>
+  </details>
+
+</body>
+</html>
