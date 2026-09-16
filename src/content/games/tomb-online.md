@@ -20,12 +20,20 @@ thumbnail: /images/games/tomb-online-cover.svg
 screenshots:
   - src: /images/games/tomb-online-shot-1.jpg
     title: 低保真原型：我的墓园主界面
-    note: 第一周可点击原型——墓园、金币钱包与功能入口的完整信息架构。
+    note: 第一周可点击原型——墓园、金币钱包与功能入口的完整信息架构验证。
   - src: /images/games/tomb-online-shot-2.jpg
-    title: 装扮与互动流程
-    note: 原型验证"布置 → 邀请 → 扫墓 → 结算"的社交循环手感，再做 Unity 切片。
-playableWeb: true
-embedUrl: /play/tomb-online/index.html
+    title: 美术验证：墓园场景图集
+    note: 像素风墓园场景的组件拆分——夜景、月亮与地面网格构成"数据夜空"基调。
+  - src: /images/games/tomb-online-shot-3.jpg
+    title: 美术验证：墓碑组件集
+    note: 墓碑是玩家的核心表达载体，造型集合支撑"一眼看出是我的"的个性化需求。
+  - src: /images/games/tomb-online-shot-4.jpg
+    title: 美术验证：供品与互动道具
+    note: 献花、上香等扫墓互动的视觉元素——低压力社交动作的具体化。
+playableWeb: false
+downloadLinks:
+  - label: 打开低保真原型（新标签页）
+    url: /play/tomb-online/index.html
 repoUrl: https://github.com/HongyiLU/tomb-online
 role: 玩法与社交系统设计 / 经济系统设计 / 验收标准制定
 teamSize: 单人（AI 全程实现）
@@ -71,5 +79,25 @@ milestones:
 ---
 
 社交压力设计是这款游戏的核心命题：扫墓互动必须轻到"顺手就做了"，但奖励要双边成立——墓主被来访的满足感，和访客动手的趣味感，缺一半循环就不转。
+
+## 策划案定调
+
+三句宣传语决定了整个游戏的语气：
+
+- "我还活着，但你可以先来看看我。"
+- "每天拜一拜，友情不断线。"
+- "这里记录的不是死亡，而是一个人在互联网上留下的痕迹。"
+
+目标用户是 16~35 岁、熟悉网络文化但不愿投入大量时间的玩家——所以所有互动都设计成 30 秒～3 分钟的单局节奏，黑色幽默负责传播，温情负责留存。
+
+## 验证路径
+
+微信小游戏本体依赖微信容器，无法直接网页试玩。当前的展示策略是两段式：
+
+1. **低保真原型**（本页提供新标签入口）：验证"布置 → 邀请 → 扫墓 → 结算"的社交循环手感与信息架构；
+2. **Unity 垂直切片**：面向微信端实现本地双账号分享、扫墓互动与双边金币结算，收口后以实机录像形式补充展示。
+
+美术方向以像素风为基底做验证，上图是墓园场景与核心组件的图集拆分。
+
 
 页面内嵌的是第一周低保真原型（可直接玩），Unity 小游戏切片面向微信端，等切片收口后会录制实机画面替换展示。
